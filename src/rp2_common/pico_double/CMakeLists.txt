@@ -124,7 +124,7 @@ if (NOT TARGET pico_double)
 
     macro(pico_set_double_implementation TARGET IMPL)
         get_target_property(target_type ${TARGET} TYPE)
-        if ("EXECUTABLE" STREQUAL "${target_type}")
+        if ("EXECUTABLE" STREQUAL "${target_type}" OR "OBJECT_LIBRARY" STREQUAL "${target_type}")
             set_target_properties(${TARGET} PROPERTIES PICO_TARGET_DOUBLE_IMPL "pico_double_${IMPL}")
         else()
             message(FATAL_ERROR "double implementation must be set on executable not library")

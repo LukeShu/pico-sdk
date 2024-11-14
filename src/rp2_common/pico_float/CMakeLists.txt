@@ -133,7 +133,7 @@
 
     macro(pico_set_float_implementation TARGET IMPL)
         get_target_property(target_type ${TARGET} TYPE)
-        if ("EXECUTABLE" STREQUAL "${target_type}")
+        if ("EXECUTABLE" STREQUAL "${target_type}" OR "OBJECT_LIBRARY" STREQUAL "${target_type}")
             set_target_properties(${TARGET} PROPERTIES PICO_TARGET_FLOAT_IMPL "pico_float_${IMPL}")
         else()
             message(FATAL_ERROR "float implementation must be set on executable not library")
