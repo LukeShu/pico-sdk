@@ -28,7 +28,6 @@ set(KITCHEN_SINK_LIBS
     pico_aon_timer
     pico_bit_ops
     pico_bootrom
-    pico_bootsel_via_double_reset
     pico_divider
     pico_double
     pico_fix_rp2040_usb_device_enumeration

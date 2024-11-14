@@ -89,7 +89,6 @@ pico_add_subdirectory(rp2_common/pico_platform_panic)
 if (NOT PICO_BARE_METAL)
     # NOTE THE ORDERING HERE IS IMPORTANT AS SOME TARGETS CHECK ON EXISTENCE OF OTHER TARGETS
     pico_add_subdirectory(rp2_common/pico_aon_timer)
-    pico_add_subdirectory(rp2_common/pico_bootsel_via_double_reset)
     pico_add_subdirectory(rp2_common/pico_multicore)
     pico_add_subdirectory(rp2_common/pico_unique_id)
 

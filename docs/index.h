@@ -59,7 +59,6 @@
  * @{
  * \cond pico_aon_timer \defgroup pico_aon_timer pico_aon_timer \endcond
  * \cond pico_async_context \defgroup pico_async_context pico_async_context \endcond
- * \cond pico_bootsel_via_double_reset \defgroup pico_bootsel_via_double_reset pico_bootsel_via_double_reset \endcond
  * \cond pico_flash \defgroup pico_flash pico_flash \endcond
  * \cond pico_i2c_slave \defgroup pico_i2c_slave pico_i2c_slave \endcond
  * \cond pico_multicore \defgroup pico_multicore pico_multicore \endcond
