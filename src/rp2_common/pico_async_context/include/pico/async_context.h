@@ -195,8 +195,8 @@ struct async_context {
  * This method may be called in a nested fashion by the the lock owner.
  *
  * \note the async_context lock is nestable by the same caller, so an internal count is maintained
- * 
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ *
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -215,7 +215,7 @@ static inline void async_context_acquire_lock_blocking(async_context_t *context)
  * release, When the outermost lock is released, a check is made for work which might have been skipped while the lock was held,
  * and any such work may be performed during this call IF the call is made from the same core that the async_context belongs to.
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -264,7 +264,7 @@ static inline uint32_t async_context_execute_sync(async_context_t *context, uint
  *
  * The time to fire is specified in the next_time field of the worker.
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -283,7 +283,7 @@ static inline bool async_context_add_at_time_worker(async_context_t *context, as
  *
  * The time to fire is specified by the at parameter.
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -302,9 +302,9 @@ static inline bool async_context_add_at_time_worker_at(async_context_t *context,
  *
  * An "at time" worker will run at or after a specific point in time, and is automatically when (just before) it runs.
  *
- * The time to fire is specified by a delay via the ms parameter 
+ * The time to fire is specified by a delay via the ms parameter
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -321,7 +321,7 @@ static inline bool async_context_add_at_time_worker_in_ms(async_context_t *conte
  * \brief Remove an "at time" worker from a context
  * \ingroup pico_async_context
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -341,7 +341,7 @@ static inline bool async_context_remove_at_time_worker(async_context_t *context,
  *
  * The time to fire is specified by a delay via the ms parameter
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -356,7 +356,7 @@ static inline bool async_context_add_when_pending_worker(async_context_t *contex
  * \brief Remove a "when pending" worker from a context
  * \ingroup pico_async_context
  *
- * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any 
+ * \note for async_contexts that provide locking (not async_context_poll), this method is threadsafe. and may be called from within any
  * worker method called by the async_context or from any other non-IRQ context.
  *
  * \param context the async_context
@@ -385,10 +385,10 @@ static inline void async_context_set_work_pending(async_context_t *context, asyn
 /*!
  * \brief Perform any pending work for polling style async_context
  * \ingroup pico_async_context
- * 
+ *
  * For a polled async_context (e.g. \ref async_context_poll) the user is responsible for calling this method
  * periodically to perform any required work.
- * 
+ *
  * This method may immediately perform outstanding work on other context types, but is not required to.
  *
  * \param context the async_context

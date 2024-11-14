@@ -39,7 +39,7 @@ extern "C" {
  * flexible configuration make it possible to optimise many other tasks such as quantization and
  * dithering, table lookup address generation, affine texture mapping, decompression and linear feedback.
  *
- * Please refer to the appropriate RP-series microcontroller datasheet for more information on the HW 
+ * Please refer to the appropriate RP-series microcontroller datasheet for more information on the HW
  * interpolators and how they work.
  */
 

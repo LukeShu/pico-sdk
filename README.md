@@ -36,7 +36,7 @@ See [pico-examples](https://github.com/raspberrypi/pico-examples) for example co
 
 # Getting the latest SDK code
 
-The [master](https://github.com/raspberrypi/pico-sdk/tree/master/) branch of `pico-sdk` on GitHub contains the 
+The [master](https://github.com/raspberrypi/pico-sdk/tree/master/) branch of `pico-sdk` on GitHub contains the
 _latest stable release_ of the SDK. If you need or want to test upcoming features, you can try the
 [develop](https://github.com/raspberrypi/pico-sdk/tree/develop/) branch instead.
 
@@ -131,17 +131,17 @@ instructions for other platforms, and just in general, we recommend you see [Ras
 
            ```cmake
            cmake_minimum_required(VERSION 3.13)
- 
+
            # initialize the SDK directly
            include(/path/to/pico-sdk/pico_sdk_init.cmake)
- 
+
            project(my_project)
- 
+
            # initialize the Raspberry Pi Pico SDK
            pico_sdk_init()
- 
+
            # rest of your project
- 
+
            ```
 1. Write your code (see [pico-examples](https://github.com/raspberrypi/pico-examples) or the [Raspberry Pi Pico-Series C/C++ SDK](https://rptl.io/pico-c-sdk) documentation for more information)
 
@@ -180,15 +180,15 @@ instructions for other platforms, and just in general, we recommend you see [Ras
       $ mkdir build
       $ cd build
       $ cmake ..
-      ```   
-   
+      ```
+
    When building for a board other than the Raspberry Pi Pico, you should pass `-DPICO_BOARD=board_name` to the `cmake` command above, e.g. `cmake -DPICO_BOARD=pico2 ..` or `cmake -DPICO_BOARD=pico_w ..` to configure the SDK and build options accordingly for that particular board.
 
-   Specifying `PICO_BOARD=<booardname>` sets up various compiler defines (e.g. default pin numbers for UART and other hardware) and in certain 
+   Specifying `PICO_BOARD=<booardname>` sets up various compiler defines (e.g. default pin numbers for UART and other hardware) and in certain
    cases also enables the use of additional libraries (e.g. wireless support when building for `PICO_BOARD=pico_w`) which cannot
    be built without a board which provides the requisite hardware functionality.
 
-   For a list of boards defined in the SDK itself, look in [this directory](src/boards/include/boards) which has a 
+   For a list of boards defined in the SDK itself, look in [this directory](src/boards/include/boards) which has a
    header for each named board.
 
 1. Make your target from the build directory you created.

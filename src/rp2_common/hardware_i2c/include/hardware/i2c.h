@@ -35,7 +35,7 @@ extern "C" {
  * slaves when performing data transfers. A master is a device that initiates a data transfer on the bus and generates the
  * clock signals to permit that transfer. The first byte in the data transfer always contains the 7-bit address and
  * a read/write bit in the LSB position. This API takes care of toggling the read/write bit. After this, any device addressed
- * is considered a slave. 
+ * is considered a slave.
  *
  * This API allows the controller to be set up as a master or a slave using the \ref i2c_set_slave_mode function.
  *

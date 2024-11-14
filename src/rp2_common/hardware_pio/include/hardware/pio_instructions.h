@@ -9,10 +9,10 @@
 
 #include "pico.h"
 
-/** \brief PIO instruction encoding 
+/** \brief PIO instruction encoding
  *  \defgroup pio_instructions pio_instructions
  *  \ingroup hardware_pio
- * 
+ *
  * Functions for generating PIO instruction encodings programmatically. In debug builds
  *`PARAM_ASSERTIONS_ENABLED_PIO_INSTRUCTIONS` can be set to 1 to enable validation of encoding function
  * parameters.

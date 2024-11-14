@@ -54,7 +54,7 @@
 #define CMD_READ 0xeb
 
 // "Mode bits" are 8 special bits sent immediately after
-// the address bits in a "Read Data Fast Quad I/O" command sequence. 
+// the address bits in a "Read Data Fast Quad I/O" command sequence.
 // On W25Q080, the four LSBs are don't care, and if MSBs == 0xa, the
 // next read does not require the 0xeb instruction prefix.
 #define MODE_CONTINUOUS_READ 0xa0

@@ -52,7 +52,7 @@ bool check_counter_sums(void) {
 				i, per_lock_sum, counter_shared[i]
 			);
 			all_ok = false;
-		} 
+		}
 		if (counter_shared[i] > ITERATIONS * NUM_CORES) {
 			printf("Impossible shared counter value %d: %08x (max %08x)\n",
 				i, counter_shared[i], ITERATIONS * NUM_CORES);

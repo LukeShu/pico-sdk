@@ -4,7 +4,7 @@
  * SPDX-License-Identifier: BSD-3-Clause
  */
 
-#if !PICO_CXX_ENABLE_EXCEPTIONS 
+#if !PICO_CXX_ENABLE_EXCEPTIONS
 // Override the standard allocators to use regular malloc/free
 
 #if !PICO_CXX_DISABLE_ALLOCATION_OVERRIDES // Let user override

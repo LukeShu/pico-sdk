@@ -264,9 +264,9 @@ static inline void __attribute__((noreturn)) reset_usb_boot(uint32_t usb_activit
 /*!
  * \brief Connect the SSI/QMI to the QSPI pads
  * \ingroup pico_bootrom
- * 
+ *
  * Restore all QSPI pad controls to their default state, and connect the SSI/QMI peripheral to the QSPI pads.
- * 
+ *
  * \if rp2350_specific
  * On RP2350 if a secondary flash chip select GPIO has been configured via OTP OTP_DATA_FLASH_DEVINFO, or by writing to the runtime
  * copy of FLASH_DEVINFO in bootram, then this bank 0 GPIO is also initialised and the QMI peripheral is connected. Otherwise,
@@ -281,25 +281,25 @@ static inline void rom_connect_internal_flash() {
 /*!
  * \brief Return the QSPI device from its XIP state to a serial command state
  * \ingroup pico_bootrom
- * 
+ *
  * \if rp2040_specific
  * On RP2040, first set up the SSI for serial-mode operations, then issue the fixed XIP exit sequence described in Section 2.8.1.2
  * of the datasheet. Note that the bootrom code uses the IO forcing logic to drive the CS pin, which must be cleared before returning
  * the SSI to XIP mode (e.g. by a call to _flash_flush_cache). This function configures the SSI with a fixed SCK clock divisor of /6.
  * \endif
- * 
+ *
  * \if rp2350_specific
  * On RP2350, Initialise the QMI for serial operations (direct mode), and also initialise a basic XIP mode, where the QMI will perform
  * 03h serial read commands at low speed (CLKDIV=12) in response to XIP reads.
- * 
+ *
  * Then, issue a sequence to the QSPI device on chip select 0, designed to return it from continuous read mode ("XIP mode") and/or
  * QPI mode to a state where it will accept serial commands. This is necessary after system reset to restore the QSPI device to a known
  * state, because resetting RP2350 does not reset attached QSPI devices. It is also necessary when user code, having already performed
  * some continuous-read-mode or QPI-mode accesses, wishes to return the QSPI device to a state where it will accept the serial erase and
  * programming commands issued by the bootrom's flash access functions.
- * 
+ *
  * If a GPIO for the secondary chip select is configured via FLASH_DEVINFO, then the XIP exit sequence is also issued to chip select 1.
- * 
+ *
  * The QSPI device should be accessible for XIP reads after calling this function; the name flash_exit_xip refers to returning the QSPI
  * device from its XIP state to a serial command state.
  * \endif
@@ -312,29 +312,29 @@ static inline void rom_flash_exit_xip() {
 /*!
  * \brief Erase bytes in flash
  * \ingroup pico_bootrom
- * 
+ *
  * Erase count bytes, starting at addr (offset from start of flash). Optionally, pass a block erase command e.g. D8h block erase,
  * and the size of the block erased by this command - this function will use the larger block erase where possible, for much higher
  * erase speed. addr must be aligned to a 4096-byte sector, and count must be a multiple of 4096 bytes.
- * 
+ *
  * This is a low-level flash API, and no validation of the arguments is performed.
- * 
+ *
  * \if rp2350_specific
  * See rom_flash_op on RP2350 for a higher-level API which checks alignment, flash bounds and partition permissions, and can transparently
  * apply a runtime-to-storage address translation.
- * 
+ *
  * The QSPI device must be in a serial command state before calling this API, which can be achieved by calling rom_connect_internal_flash()
  * followed by rom_flash_exit_xip(). After the erase, the flash cache should be flushed via rom_flash_flush_cache() to ensure the modified
  * flash data is visible to cached XIP accesses.
- * 
+ *
  * Finally, the original XIP mode should be restored by copying the saved XIP setup function from bootram into SRAM, and executing it:
  * the bootrom provides a default function which restores the flash mode/clkdiv discovered during flash scanning, and user programs can
  * override this with their own XIP setup function.
- * 
+ *
  * For the duration of the erase operation, QMI is in direct mode and attempting to access XIP from DMA, the debugger or the other core will
  * return a bus fault. XIP becomes accessible again once the function returns.
  * \endif
- * 
+ *
  * \param addr the offset from start of flash to be erased
  * \param count number of bytes to erase
  * \param block_size optional size of block erased by block_cmd
@@ -348,19 +348,19 @@ static inline void rom_flash_range_erase(uint32_t addr, size_t count, uint32_t b
 /*!
  * \brief Program bytes in flash
  * \ingroup pico_bootrom
- * 
+ *
  * Program data to a range of flash addresses starting at addr (offset from the start of flash) and count bytes in size. addr must be
  * aligned to a 256-byte boundary, and count must be a multiple of 256.
- * 
+ *
  * This is a low-level flash API, and no validation of the arguments is performed.
- * 
+ *
  * \if rp2350_specific
  * See rom_flash_op on RP2350 for a higher-level API which checks alignment, flash bounds and partition permissions,
  * and can transparently apply a runtime-to-storage address translation.
- * 
+ *
  * The QSPI device must be in a serial command state before calling this API - see notes on rom_flash_range_erase
  * \endif
- * 
+ *
  * \param addr the offset from start of flash to be erased
  * \param data buffer containing the data to be written
  * \param count number of bytes to erase
@@ -373,17 +373,17 @@ static inline void rom_flash_range_program(uint32_t addr, const uint8_t *data, s
 /*!
  * \brief Flush the XIP cache
  * \ingroup pico_bootrom
- * 
+ *
  * \if rp2040_specific
  * Flush and enable the XIP cache. Also clears the IO forcing on QSPI CSn, so that the SSI can drive the flash chip select as normal.
  * \endif
- * 
+ *
  * \if rp2350_specific
  * Flush the entire XIP cache, by issuing an invalidate by set/way maintenance operation to every cache line. This ensures that flash
  * program/erase operations are visible to subsequent cached XIP reads.
- * 
+ *
  * Note that this unpins pinned cache lines, which may interfere with cache-as-SRAM use of the XIP cache.
- * 
+ *
  * No other operations are performed.
  * \endif
  */
@@ -395,11 +395,11 @@ static inline void rom_flash_flush_cache() {
 /*!
  * \brief Configure the SSI/QMI with a standard command
  * \ingroup pico_bootrom
- * 
+ *
  * Configure the SSI/QMI to generate a standard 03h serial read command, with 24 address bits, upon each XIP access. This is a slow XIP
  * configuration, but is widely supported. CLKDIV is set to 12 on RP2350. The debugger may call this function to ensure that flash is
  * readable following a program/erase operation.
- * 
+ *
  * Note that the same setup is performed by flash_exit_xip(), and the RP2350 flash program/erase functions do not leave XIP in an
  * inaccessible state, so calls to this function are largely redundant on RP2350. It is provided on RP2350 for compatibility with RP2040.
  */
@@ -413,17 +413,17 @@ static inline void rom_flash_enter_cmd_xip() {
 /*!
  * \brief Give the bootrom a new stack
  * \ingroup pico_bootrom
- * 
+ *
  * Most bootrom functions are written just once, in Arm code, to save space. As a result these functions are emulated when
  * running under the RISC-V architecture. This is largely transparent to the user, however the stack used by the Arm emulation
  * is separate from the calling user's stack, and is stored in boot RAM but is of quite limited size. When using certain of the more
  * complex APIs or if nesting bootrom calls from within IRQs, you may need to provide a large stack.
- * 
+ *
  * This method allows the caller to specify a region of RAM to use as the stack for the current core by passing a pointer to two values: the word aligned base address,
  * and the size in bytes (multiple of 4).
- * 
+ *
  * The method fills in the previous base/size values into the passed array before returning.
- * 
+ *
  * \param stack bootrom_stack_t struct containing base and size
  */
 static inline int rom_set_bootrom_stack(bootrom_stack_t *stack) {
@@ -435,16 +435,16 @@ static inline int rom_set_bootrom_stack(bootrom_stack_t *stack) {
 /*!
  * \brief Reboot using the watchdog
  * \ingroup pico_bootrom
- * 
+ *
  * Resets the chip and uses the watchdog facility to restart.
- * 
+ *
  * The delay_ms is the millisecond delay before the reboot occurs. Note: by default this method is asynchronous
  * (unless NO_RETURN_ON_SUCCESS is set - see below), so the method will return and the reboot will happen this many milliseconds later.
- * 
+ *
  * The flags field contains one of the following values:
- * 
+ *
  * REBOOT_TYPE_NORMAL - reboot into the normal boot path.
- * 
+ *
  * REBOOT_TYPE_BOOTSEL - reboot into BOOTSEL mode.
  *  p0 - the GPIO number to use as an activity indicator (enabled by flag in p1).
  *  p1 - a set of flags:
@@ -452,27 +452,27 @@ static inline int rom_set_bootrom_stack(bootrom_stack_t *stack) {
  *   0x02 : DISABLE_PICOBOOT_INTERFACE - Disable the {picoboot} interface (see <<section_bootrom_picoboot>>).
  *   0x10 : GPIO_PIN_ACTIVE_LOW - The GPIO in p0 is active low.
  *   0x20 : GPIO_PIN_ENABLED - Enable the activity indicator on the specified GPIO.
- * 
+ *
  * REBOOT_TYPE_RAM_IMAGE - reboot into an image in RAM. The region of RAM or XIP RAM is searched for an image to run. This is the type
  * of reboot used when a RAM UF2 is dragged onto the BOOTSEL USB drive.
  *  p0 - the region start address (word-aligned).
  *  p1 - the region size (word-aligned).
- * 
+ *
  * REBOOT_TYPE_FLASH_UPDATE - variant of REBOOT_TYPE_NORMAL to use when flash has been updated. This is the type
  * of reboot used after dragging a flash UF2 onto the BOOTSEL USB drive.
  *  p0 - the address of the start of the region of flash that was updated. If this address matches the start address of a partition or slot, then that
  *       partition or slot is treated preferentially during boot (when there is a choice). This type of boot facilitates TBYB and version downgrades.
- * 
+ *
  * REBOOT_TYPE_PC_SP - reboot to a specific PC and SP. Note: this is not allowed in the ARM-NS variant.
  *  p0 - the initial program counter (PC) to start executing at. This must have the lowest bit set for Arm and clear for RISC-V
  *  p1 - the initial stack pointer (SP).
- * 
+ *
  * All of the above, can have optional flags ORed in:
- * 
+ *
  * REBOOT_TO_ARM - switch both cores to the Arm architecture (rather than leaving them as is). The call will fail with BOOTROM_ERROR_INVALID_STATE if the Arm architecture is not supported.
  * REBOOT_TO_RISCV - switch both cores to the RISC-V architecture (rather than leaving them as is). The call will fail with BOOTROM_ERROR_INVALID_STATE if the RISC-V architecture is not supported.
  * NO_RETURN_ON_SUCCESS - the watchdog h/w is asynchronous. Setting this bit forces this method not to return if the reboot is successfully initiated.
- * 
+ *
  * \param flags the reboot flags, as detailed above
  * \param delay_ms millisecond delay before the reboot occurs
  * \param p0 parameter 0, depends on flags
@@ -488,25 +488,25 @@ bool rom_get_boot_random(uint32_t out[4]);
 /*!
  * \brief Reset bootrom state
  * \ingroup pico_bootrom
- * 
+ *
  * Resets internal bootrom state, based on the following flags:
- * 
+ *
  * STATE_RESET_CURRENT_CORE - Resets any internal bootrom state for the current core into a clean state.
  * This method should be called prior to calling any other bootrom APIs on the current core,
  * and is called automatically by the bootrom during normal boot of core 0 and launch of code on core 1.
- * 
+ *
  * STATE_RESET_OTHER_CORE - Resets any internal bootrom state for the other core into a clean state. This is generally called by
  * a debugger when resetting the state of one core via code running on the other.
- * 
+ *
  * STATE_RESET_GLOBAL_STATE - Resets all non core-specific state, including:
  *  Disables access to bootrom APIs from ARM-NS
  *  Unlocks all BOOT spinlocks
  *  Clears any secure code callbacks
- * 
+ *
  * Note: the sdk calls this method on runtime initialisation to put the bootrom into a known state. This
  * allows the program to function correctly if it is entered (e.g. from a debugger) without taking the usual boot path (which
  * resets the state appropriately itself).
- * 
+ *
  * \param flags flags, as detailed above
  */
 static inline void rom_bootrom_state_reset(uint32_t flags) {
@@ -517,7 +517,7 @@ static inline void rom_bootrom_state_reset(uint32_t flags) {
 /*!
  * \brief Reset address translation
  * \ingroup pico_bootrom
- * 
+ *
  * Restore the QMI address translation registers, QMI_ATRANS0 through QMI_ATRANS7, to their reset state. This makes the
  * runtime-to-storage address map an identity map, i.e. the mapped and unmapped address are equal, and the entire space is
  * fully mapped.
@@ -530,10 +530,10 @@ static inline void rom_flash_reset_address_trans(void) {
 /*!
  * \brief Configure QMI in a XIP read mode
  * \ingroup pico_bootrom
- * 
+ *
  * Configure QMI for one of a small menu of XIP read modes supported by the bootrom. This mode is configured for both memory
  * windows (both chip selects), and the clock divisor is also applied to direct mode.
- * 
+ *
  * \param mode bootrom_xip_mode_t mode to use
  * \param clkdiv clock divider
  */
@@ -545,33 +545,33 @@ static inline void rom_flash_select_xip_read_mode(bootrom_xip_mode_t mode, uint8
 /*!
  * \brief Perform a flash read, erase, or program operation
  * \ingroup pico_bootrom
- * 
+ *
  * The flash operation is bounds-checked against the known flash devices specified by the runtime value of FLASH_DEVINFO,
  * stored in bootram. This is initialised by the bootrom to the OTP value OTP_DATA_FLASH_DEVINFO, if
  * OTP_DATA_BOOT_FLAGS0_FLASH_DEVINFO_ENABLE is set; otherwise it is initialised to 16 MiB for chip select 0 and 0 bytes
  * for chip select 1. FLASH_DEVINFO can be updated at runtime by writing to its location in bootram, the pointer to which
  * can be looked up in the ROM table.
- * 
+ *
  * If a resident partition table is in effect, then the flash operation is also checked against the partition permissions.
  * The Secure version of this function can specify the caller's effective security level (Secure, Non-secure, bootloader)
  * using the CFLASH_SECLEVEL_BITS bitfield of the flags argument, whereas the Non-secure function is always checked against
  * the Non-secure permissions for the partition. Flash operations which span two partitions are not allowed, and will fail
  * address validation.
- * 
+ *
  * If OTP_DATA_FLASH_DEVINFO_D8H_ERASE_SUPPORTED is set, erase operations will use a D8h 64 kiB block erase command where
  * possible (without erasing outside the specified region), for faster erase time. Otherwise, only 20h 4 kiB sector erase
  * commands are used.
- * 
+ *
  * Optionally, this API can translate addr from flash runtime addresses to flash storage addresses, according to the
  * translation currently configured by QMI address translation registers, QMI_ATRANS0 through QMI_ATRANS7. For example, an
  * image stored at a +2 MiB offset in flash (but mapped at XIP address 0 at runtime), writing to an offset of +1 MiB into
  * the image, will write to a physical flash storage address of 3 MiB. Translation is enabled by setting the
  * CFLASH_ASPACE_BITS bitfield in the flags argument.
- * 
+ *
  * When translation is enabled, flash operations which cross address holes in the XIP runtime address space (created by
  * non-maximum ATRANSx_SIZE) will return an error response. This check may tear: the transfer may be partially performed
  * before encountering an address hole and ultimately returning failure.
- * 
+ *
  * When translation is enabled, flash operations are permitted to cross chip select boundaries, provided this does not
  * span an ATRANS address hole. When translation is disabled, the entire operation must target a single flash chip select
  * (as determined by bits 24 and upward of the address), else address validation will fail.
@@ -595,15 +595,15 @@ static inline int rom_flash_op(cflash_flags_t flags, uintptr_t addr, uint32_t si
  * \ingroup pico_bootrom
  *
  * The buffer must be aligned to 2 bytes or 4 bytes according to the IS_ECC flag.
- * 
+ *
  * This method will read and write rows until the first row it encounters that fails a key or permission check at which
  * it will return BOOTROM_ERROR_NOT_PERMITTED.
- * 
+ *
  * Writing will also stop at the first row where an attempt is made to set an OTP bit from a 1 to a 0, and
  * BOOTROM_ERROR_UNSUPPORTED_MODIFICATION will be returned.
- * 
+ *
  * If all rows are read/written successfully, then BOOTROM_OK will be returned.
- * 
+ *
  * \param buf buffer to read to/write from
  * \param buf_len size of buf
  * \param cmd OTP command to execute
@@ -629,24 +629,24 @@ static inline int rom_func_otp_access(uint8_t *buf, uint32_t buf_len, otp_cmd_t 
  *
  * Fills a buffer with information from the partition table. Note that this API is also used to return information over the
  * picoboot interface.
- * 
+ *
  * On success, the buffer is filled, and the number of words filled in the buffer is returned. If the partition table
  * has not been loaded (e.g. from a watchdog or RAM boot), then this method will return BOOTROM_ERROR_NO_DATA, and you
  * should load the partition table via load_partition_table() first.
- * 
+ *
  * Note that not all data from the partition table is kept resident in memory by the bootrom due to size constraints.
  * To protect against changes being made in flash after the bootrom has loaded the resident portion, the bootrom keeps
  * a hash of the partition table as of the time it loaded it. If the hash has changed by the time this method is called,
  * then it will return BOOTROM_ERROR_INVALID_STATE.
- * 
+ *
  * The information returned is chosen by the flags_and_partition parameter; the first word in the returned buffer,
  * is the (sub)set of those flags that the API supports. You should always check this value before interpreting
  * the buffer.
- * 
+ *
  * Following the first word, returns words of data for each present flag in order. With the exception of PT_INFO,
  * all the flags select "per partition" information, so each field is returned in flag order for one partition after
  * the next. The special SINGLE_PARTITION flag indicates that data for only a single partition is required.
- * 
+ *
  * \param out_buffer buffer to write data to
  * \param out_buffer_word_size size of out_buffer, in words
  * \param partition_and_flags partition number and flags
@@ -668,10 +668,10 @@ static inline int rom_get_partition_table_info(uint32_t *out_buffer, uint32_t ou
  * This method potentially requires similar complexity to the boot path in terms of picking amongst versions, checking signatures etc.
  * As a result it requires a user provided memory buffer as a work area. The work area should byte word-aligned and of sufficient size
  * or BOOTROM_ERROR_INSUFFICIENT_RESOURCES will be returned. The work area size currently required is 3064, so 3K is a good choice.
- * 
+ *
  * If force_reload is false, then this method will return BOOTROM_OK immediately if the bootrom is loaded, otherwise it will
  * reload the partition table if it has been loaded already, allowing for the partition table to be updated in a running program.
- * 
+ *
  * \param workarea_base base address of work area
  * \param workarea_size size of work area
  * \param force_reload force reloading of the partition table
@@ -691,18 +691,18 @@ static inline int rom_load_partition_table(uint8_t *workarea_base, uint32_t work
  * \ingroup pico_bootrom
  *
  * Determines which of the partitions has the "better" IMAGE_DEF. In the case of executable images, this is the one that would be booted
- * 
+ *
  * This method potentially requires similar complexity to the boot path in terms of picking amongst versions, checking signatures etc.
  * As a result it requires a user provided memory buffer as a work area. The work area should bye word aligned, and of sufficient size
  * or BOOTROM_ERROR_INSUFFICIENT_RESOURCES will be returned. The work area size currently required is 3064, so 3K is a good choice.
- * 
+ *
  * The passed partition number can be any valid partition number other than the "B" partition of an A/B pair.
- * 
+ *
  * This method returns a negative error code, or the partition number of the picked partition if (i.e. partition_a_num or the
  * number of its "B" partition if any).
- * 
+ *
  * NOTE: This method does not look at owner partitions, only the A partition passed and it's corresponding B partition.
- * 
+ *
  * \param workarea_base base address of work area
  * \param workarea_size size of work area
  * \param partition_a_num the A partition of the pair
@@ -723,7 +723,7 @@ static inline int rom_pick_ab_partition(uint8_t *workarea_base, uint32_t workare
  *
  * Returns the index of the B partition of partition A if a partition table is present and loaded, and there is a partition A with a B partition;
  * otherwise returns BOOTROM_ERROR_NOT_FOUND.
- * 
+ *
  * \param pi_a the A partition number
  */
 static inline int rom_get_b_partition(uint pi_a) {
@@ -735,18 +735,18 @@ static inline int rom_get_b_partition(uint pi_a) {
 /*!
  * \brief Get UF2 Target Partition
  * \ingroup pico_bootrom
- * 
+ *
  * This method performs the same operation to decide on a target partition for a UF2 family ID as when a UF2 is dragged onto the USB
  * drive in BOOTSEL mode.
- * 
+ *
  * This method potentially requires similar complexity to the boot path in terms of picking amongst versions, checking signatures etc.
  * As a result it requires a user provided memory buffer as a work area. The work area should byte word-aligned and of sufficient size
  * or `BOOTROM_ERROR_INSUFFICIENT_RESOURCES` will be returned. The work area size currently required is 3064, so 3K is a good choice.
- * 
+ *
  * If the partition table
  * has not been loaded (e.g. from a watchdog or RAM boot), then this method will return `BOOTROM_ERROR_PRECONDITION_NOT_MET`, and you
  * should load the partition table via <<api-load_partition_table, load_partition_table()>> first.
- * 
+ *
  * \param workarea_base base address of work area
  * \param workarea_size size of work area
  * \param family_id the family ID to place
@@ -766,11 +766,11 @@ static inline int rom_get_uf2_target_partition(uint8_t *workarea_base, uint32_t 
  * \ingroup pico_bootrom
  *
  * Applies the address translation currently configured by QMI address translation registers.
- * 
+ *
  * Translating an address outside of the XIP runtime address window, or beyond the bounds of an ATRANSx_SIZE field, returns BOOTROM_ERROR_INVALID_ADDRESS,
  * which is not a valid flash storage address. Otherwise, return the storage address which QMI would access when presented with the runtime address addr.
  * This is effectively a virtual-to-physical address translation for QMI.
- * 
+ *
  * \param flash_runtime_addr the address to translate
  */
 static inline intptr_t rom_flash_runtime_to_storage_addr(uintptr_t flash_runtime_addr) {
@@ -784,23 +784,23 @@ static inline intptr_t rom_flash_runtime_to_storage_addr(uintptr_t flash_runtime
  * \ingroup pico_bootrom
  *
  * Searches a memory region for a launchable image, and executes it if possible.
- * 
+ *
  * The region_base and region_size specify a word-aligned, word-multiple-sized area of RAM, XIP RAM or flash to search.
  * The first 4 kiB of the region must contain the start of a Block Loop with an IMAGE_DEF. If the new image is launched,
  * the call does not return otherwise an error is returned.
- * 
+ *
  * The region_base is signed, as a negative value can be passed, which indicates that the (negated back to positive value)
  * is both the region_base and the base of the "flash update" region.
- * 
+ *
  * This method potentially requires similar complexity to the boot path in terms of picking amongst versions, checking signatures etc.
  * As a result it requires a user provided memory buffer as a work area. The work area should be word aligned, and of sufficient size
  * or BOOTROM_ERROR_INSUFFICIENT_RESOURCES will be returned. The work area size currently required is 3064, so 3K is a good choice.
- * 
+ *
  * NOTE: This method is primarily expected to be used when implementing bootloaders.
- * 
+ *
  * NOTE: When chaining into an image, the OTP_DATA_BOOT_FLAGS0_ROLLBACK_REQUIRED flag will not be set, to prevent invalidating a bootloader
  * without a rollback version by booting a binary which has one.
- * 
+ *
  * \param workarea_base base address of work area
  * \param workarea_size size of work area
  * \param region_base base address of image
@@ -822,21 +822,21 @@ static inline int rom_chain_image(uint8_t *workarea_base, uint32_t workarea_size
  * Perform an "explicit" buy of an executable launched via an IMAGE_DEF which was "explicit buy" flagged. A "flash update"
  * boot of such an image is a way to have the image execute once, but only become the "current" image if it calls
  * back into the bootrom via this call.
- * 
+ *
  * This call may perform the following:
- * 
+ *
  * - Erase and rewrite the part of flash containing the "explicit buy" flag in order to clear said flag.
  * - Erase the first sector of the other partition in an A/B partition scenario, if this new IMAGE_DEF is a version downgrade
  *   (so this image will boot again when not doing a "flash update" boot)
  * - Update the rollback version in OTP if the chip is secure, and a rollback version is present in the image.
- * 
+ *
  * NOTE: The device may reboot while updating the rollback version, if multiple rollback rows need to be written - this occurs
  * when the version crosses a multiple of 24 (for example upgrading from version 23 to 25 requires a reboot, but 23 to 24 or 24 to 25 doesn't).
  * The application should therefore be prepared to reboot when calling this function, if rollback versions are in use.
- * 
+ *
  * Note that the first of the above requires 4 kiB of scratch space, so you should pass a word aligned buffer of at least 4 kiB to this method,
  * or it will return BOOTROM_ERROR_INSUFFICIENT_RESOURCES if the "explicit buy" flag needs to be cleared.
- * 
+ *
  * \param buffer base address of scratch space
  * \param buffer_size size of scratch space
  */
@@ -849,14 +849,14 @@ static inline int rom_explicit_buy(uint8_t *buffer, uint32_t buffer_size) {
 /*!
  * \brief Set NS API Permission
  * \ingroup pico_bootrom
- * 
+ *
  * Allow or disallow the specific NS API (note all NS APIs default to disabled).
- * 
+ *
  * ns_api_num configures ARM-NS access to the given API. When an NS API is disabled,
  * calling it will return BOOTROM_ERROR_NOT_PERMITTED.
- * 
+ *
  * NOTE: All permissions default to disallowed after a reset.
- * 
+ *
  * \param ns_api_num ns api number
  * \param allowed permission
  */
@@ -872,15 +872,15 @@ static inline int rom_set_ns_api_permission(uint ns_api_num, bool allowed) {
  * \ingroup pico_bootrom
  *
  * Utility method that can be used by secure ARM code to validate a buffer passed to it from Non-secure code.
- * 
+ *
  * Both the write parameter and the (out) result parameter ok are RCP booleans, so 0xa500a500 for true, and 0x00c300c3
  * for false. This enables hardening of this function, and indeed the write parameter must be one of these values or the RCP
  * will hang the system.
- * 
+ *
  * For success, the entire buffer must fit in range XIP_BASE -> SRAM_END, and must be accessible by the Non-secure
  * caller according to SAU + NS MPU (privileged or not based on current processor IPSR and NS CONTROL flag). Buffers
  * in USB RAM are also allowed if access is granted to NS via ACCESSCTRL.
- * 
+ *
  * \param addr buffer address
  * \param size buffer size
  * \param write rcp boolean, true if writeable
@@ -894,14 +894,14 @@ static inline void* rom_validate_ns_buffer(const void *addr, uint32_t size, uint
 /*!
  * \brief Set ROM callback function
  * \ingroup pico_bootrom
- * 
+ *
  * The only currently supported callback_number is 0 which sets the callback used for the secure_call API.
- * 
+ *
  * A callback pointer of 0 deletes the callback function, a positive callback pointer (all valid function pointers are on RP2350)
  * sets the callback function, but a negative callback pointer can be passed to get the old value without setting a new value.
- * 
+ *
  * If successful, returns >=0 (the existing value of the function pointer on entry to the function).
- * 
+ *
  * \param callback_num the callback number to set - only 0 is supported on RP2350
  * \param funcptr pointer to the callback function
  */
@@ -926,29 +926,29 @@ static inline intptr_t rom_set_rom_callback(uint callback_num, bootrom_api_callb
  * \ingroup pico_bootrom
  *
  * Fills a buffer with various system information. Note that this API is also used to return information over the picoboot interface.
- * 
+ *
  * On success, the buffer is filled, and the number of words filled in the buffer is returned.
- * 
+ *
  * The information returned is chosen by the flags parameter; the first word in the returned buffer,
  * is the (sub)set of those flags that the API supports. You should always check this value before interpreting
  * the buffer.
- * 
+ *
  * "Boot Diagnostic" information is intended to help identify the cause of a failed boot, or booting into an unexpected binary.
  * This information can be retrieved via picoboot after a watchdog reboot, however it will not survive
  * a reset via the RUN pin or POWMAN reset.
- * 
+ *
  * There is only one word of diagnostic information. What it records is based on the pp selection above, which
  * is itself set as a parameter when rebooting programmatically into a normal boot.
- * 
+ *
  * To get diagnostic info, pp must refer to a slot or an "A" partition; image diagnostics are automatically selected on boot
  * from OTP or RAM image, or when chain_image() is called.)
- * 
+ *
  * The diagnostic word thus contains data for either slot 0 and slot 1, or the "A" partition (and its "B" partition if it has one). The low half word
  * of the diagnostic word contains information from slot 0 or partition A; the high half word contains information from slot 1 or partition B.
- * 
+ *
  * To get a full picture of a failed boot involving slots and multiple partitions, the device can be rebooted
  * multiple times to gather the information.
- * 
+ *
  * \param out_buffer buffer to write data to
  * \param out_buffer_word_size size of out_buffer, in words
  * \param flags flags

@@ -97,7 +97,7 @@
 #define PICO_SMPS_MODE_PIN 23
 
 // All boards have B1 RP2040
-#ifndef PICO_RP2040_B0_SUPPORTED 
+#ifndef PICO_RP2040_B0_SUPPORTED
 #define PICO_RP2040_B0_SUPPORTED  0
 #endif
 

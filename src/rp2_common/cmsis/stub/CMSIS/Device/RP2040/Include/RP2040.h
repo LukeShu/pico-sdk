@@ -603,31 +603,31 @@ typedef struct {                                /*!< PPB Structure              
 
 
 /**
-  * @brief DW_apb_ssi has the following features: 
-            * APB interface – Allows for easy integration into a DesignWare Synthesizable Components for AMBA 2 implementation. 
-            * APB3 and APB4 protocol support. 
-            * Scalable APB data bus width – Supports APB data bus widths of 8, 16, and 32 bits. 
-            * Serial-master or serial-slave operation – Enables serial communication with serial-master or serial-slave peripheral devices. 
-            * Programmable Dual/Quad/Octal SPI support in Master Mode. 
-            * Dual Data Rate (DDR) and Read Data Strobe (RDS) Support - Enables the DW_apb_ssi master to perform operations with the device in DDR and RDS modes when working in Dual/Quad/Octal mode of operation. 
-            * Data Mask Support - Enables the DW_apb_ssi to selectively update the bytes in the device. This feature is applicable only in enhanced SPI modes. 
-            * eXecute-In-Place (XIP) support - Enables the DW_apb_ssi master to behave as a memory mapped I/O and fetches the data from the device based on the APB read request. This feature is applicable only in enhanced SPI modes. 
-            * DMA Controller Interface – Enables the DW_apb_ssi to interface to a DMA controller over the bus using a handshaking interface for transfer requests. 
-            * Independent masking of interrupts – Master collision, transmit FIFO overflow, transmit FIFO empty, receive FIFO full, receive FIFO underflow, and receive FIFO overflow interrupts can all be masked independently. 
-            * Multi-master contention detection – Informs the processor of multiple serial-master accesses on the serial bus. 
-            * Bypass of meta-stability flip-flops for synchronous clocks – When the APB clock (pclk) and the DW_apb_ssi serial clock (ssi_clk) are synchronous, meta-stable flip-flops are not used when transferring control signals across these clock domains. 
-            * Programmable delay on the sample time of the received serial data bit (rxd); enables programmable control of routing delays resulting in higher serial data-bit rates. 
-            * Programmable features: 
-            - Serial interface operation – Choice of Motorola SPI, Texas Instruments Synchronous Serial Protocol or National Semiconductor Microwire. 
-            - Clock bit-rate – Dynamic control of the serial bit rate of the data transfer; used in only serial-master mode of operation. 
-            - Data Item size (4 to 32 bits) – Item size of each data transfer under the control of the programmer. 
-            * Configured features: 
-            - FIFO depth – 16 words deep. The FIFO width is fixed at 32 bits. 
-            - 1 slave select output. 
-            - Hardware slave-select – Dedicated hardware slave-select line. 
-            - Combined interrupt line - one combined interrupt line from the DW_apb_ssi to the interrupt controller. 
-            - Interrupt polarity – active high interrupt lines. 
-            - Serial clock polarity – low serial-clock polarity directly after reset. 
+  * @brief DW_apb_ssi has the following features:
+            * APB interface – Allows for easy integration into a DesignWare Synthesizable Components for AMBA 2 implementation.
+            * APB3 and APB4 protocol support.
+            * Scalable APB data bus width – Supports APB data bus widths of 8, 16, and 32 bits.
+            * Serial-master or serial-slave operation – Enables serial communication with serial-master or serial-slave peripheral devices.
+            * Programmable Dual/Quad/Octal SPI support in Master Mode.
+            * Dual Data Rate (DDR) and Read Data Strobe (RDS) Support - Enables the DW_apb_ssi master to perform operations with the device in DDR and RDS modes when working in Dual/Quad/Octal mode of operation.
+            * Data Mask Support - Enables the DW_apb_ssi to selectively update the bytes in the device. This feature is applicable only in enhanced SPI modes.
+            * eXecute-In-Place (XIP) support - Enables the DW_apb_ssi master to behave as a memory mapped I/O and fetches the data from the device based on the APB read request. This feature is applicable only in enhanced SPI modes.
+            * DMA Controller Interface – Enables the DW_apb_ssi to interface to a DMA controller over the bus using a handshaking interface for transfer requests.
+            * Independent masking of interrupts – Master collision, transmit FIFO overflow, transmit FIFO empty, receive FIFO full, receive FIFO underflow, and receive FIFO overflow interrupts can all be masked independently.
+            * Multi-master contention detection – Informs the processor of multiple serial-master accesses on the serial bus.
+            * Bypass of meta-stability flip-flops for synchronous clocks – When the APB clock (pclk) and the DW_apb_ssi serial clock (ssi_clk) are synchronous, meta-stable flip-flops are not used when transferring control signals across these clock domains.
+            * Programmable delay on the sample time of the received serial data bit (rxd); enables programmable control of routing delays resulting in higher serial data-bit rates.
+            * Programmable features:
+            - Serial interface operation – Choice of Motorola SPI, Texas Instruments Synchronous Serial Protocol or National Semiconductor Microwire.
+            - Clock bit-rate – Dynamic control of the serial bit rate of the data transfer; used in only serial-master mode of operation.
+            - Data Item size (4 to 32 bits) – Item size of each data transfer under the control of the programmer.
+            * Configured features:
+            - FIFO depth – 16 words deep. The FIFO width is fixed at 32 bits.
+            - 1 slave select output.
+            - Hardware slave-select – Dedicated hardware slave-select line.
+            - Combined interrupt line - one combined interrupt line from the DW_apb_ssi to the interrupt controller.
+            - Interrupt polarity – active high interrupt lines.
+            - Serial clock polarity – low serial-clock polarity directly after reset.
             - Serial clock phase – capture on first edge of serial-clock directly after reset. (SSI)
   */
 
@@ -1284,15 +1284,15 @@ typedef struct {                                /*!< DMA Structure              
 
 
 /**
-  * @brief Controls time and alarms 
-            time is a 64 bit value indicating the time in usec since power-on 
-            timeh is the top 32 bits of time & timel is the bottom 32 bits 
-            to change time write to timelw before timehw 
-            to read time read from timelr before timehr 
-            An alarm is set by setting alarm_enable and writing to the corresponding alarm register 
-            When an alarm is pending, the corresponding alarm_running signal will be high 
-            An alarm can be cancelled before it has finished by clearing the alarm_enable 
-            When an alarm fires, the corresponding alarm_irq is set and alarm_running is cleared 
+  * @brief Controls time and alarms
+            time is a 64 bit value indicating the time in usec since power-on
+            timeh is the top 32 bits of time & timel is the bottom 32 bits
+            to change time write to timelw before timehw
+            to read time read from timelr before timehr
+            An alarm is set by setting alarm_enable and writing to the corresponding alarm register
+            When an alarm is pending, the corresponding alarm_running signal will be high
+            An alarm can be cancelled before it has finished by clearing the alarm_enable
+            When an alarm fires, the corresponding alarm_irq is set and alarm_running is cleared
             To clear the interrupt write a 1 to the corresponding alarm_irq (TIMER)
   */
 
@@ -1450,73 +1450,73 @@ typedef struct {                                /*!< ADC Structure              
 
             List of configuration constants for the Synopsys I2C hardware (you may see references to these in I2C register header; these are *fixed* values, set at hardware design time):
 
-            IC_ULTRA_FAST_MODE ................ 0x0 
-            IC_UFM_TBUF_CNT_DEFAULT ........... 0x8 
-            IC_UFM_SCL_LOW_COUNT .............. 0x0008 
-            IC_UFM_SCL_HIGH_COUNT ............. 0x0006 
-            IC_TX_TL .......................... 0x0 
-            IC_TX_CMD_BLOCK ................... 0x1 
-            IC_HAS_DMA ........................ 0x1 
-            IC_HAS_ASYNC_FIFO ................. 0x0 
-            IC_SMBUS_ARP ...................... 0x0 
-            IC_FIRST_DATA_BYTE_STATUS ......... 0x1 
-            IC_INTR_IO ........................ 0x1 
-            IC_MASTER_MODE .................... 0x1 
-            IC_DEFAULT_ACK_GENERAL_CALL ....... 0x1 
-            IC_INTR_POL ....................... 0x1 
-            IC_OPTIONAL_SAR ................... 0x0 
-            IC_DEFAULT_TAR_SLAVE_ADDR ......... 0x055 
-            IC_DEFAULT_SLAVE_ADDR ............. 0x055 
-            IC_DEFAULT_HS_SPKLEN .............. 0x1 
-            IC_FS_SCL_HIGH_COUNT .............. 0x0006 
-            IC_HS_SCL_LOW_COUNT ............... 0x0008 
-            IC_DEVICE_ID_VALUE ................ 0x0 
-            IC_10BITADDR_MASTER ............... 0x0 
-            IC_CLK_FREQ_OPTIMIZATION .......... 0x0 
-            IC_DEFAULT_FS_SPKLEN .............. 0x7 
-            IC_ADD_ENCODED_PARAMS ............. 0x0 
-            IC_DEFAULT_SDA_HOLD ............... 0x000001 
-            IC_DEFAULT_SDA_SETUP .............. 0x64 
-            IC_AVOID_RX_FIFO_FLUSH_ON_TX_ABRT . 0x0 
-            IC_CLOCK_PERIOD ................... 100 
-            IC_EMPTYFIFO_HOLD_MASTER_EN ....... 1 
-            IC_RESTART_EN ..................... 0x1 
-            IC_TX_CMD_BLOCK_DEFAULT ........... 0x0 
-            IC_BUS_CLEAR_FEATURE .............. 0x0 
-            IC_CAP_LOADING .................... 100 
-            IC_FS_SCL_LOW_COUNT ............... 0x000d 
-            APB_DATA_WIDTH .................... 32 
-            IC_SDA_STUCK_TIMEOUT_DEFAULT ...... 0xffffffff 
-            IC_SLV_DATA_NACK_ONLY ............. 0x1 
-            IC_10BITADDR_SLAVE ................ 0x0 
-            IC_CLK_TYPE ....................... 0x0 
-            IC_SMBUS_UDID_MSB ................. 0x0 
-            IC_SMBUS_SUSPEND_ALERT ............ 0x0 
-            IC_HS_SCL_HIGH_COUNT .............. 0x0006 
-            IC_SLV_RESTART_DET_EN ............. 0x1 
-            IC_SMBUS .......................... 0x0 
-            IC_OPTIONAL_SAR_DEFAULT ........... 0x0 
-            IC_PERSISTANT_SLV_ADDR_DEFAULT .... 0x0 
-            IC_USE_COUNTS ..................... 0x0 
-            IC_RX_BUFFER_DEPTH ................ 16 
-            IC_SCL_STUCK_TIMEOUT_DEFAULT ...... 0xffffffff 
-            IC_RX_FULL_HLD_BUS_EN ............. 0x1 
-            IC_SLAVE_DISABLE .................. 0x1 
-            IC_RX_TL .......................... 0x0 
-            IC_DEVICE_ID ...................... 0x0 
-            IC_HC_COUNT_VALUES ................ 0x0 
-            I2C_DYNAMIC_TAR_UPDATE ............ 0 
-            IC_SMBUS_CLK_LOW_MEXT_DEFAULT ..... 0xffffffff 
-            IC_SMBUS_CLK_LOW_SEXT_DEFAULT ..... 0xffffffff 
-            IC_HS_MASTER_CODE ................. 0x1 
-            IC_SMBUS_RST_IDLE_CNT_DEFAULT ..... 0xffff 
-            IC_SMBUS_UDID_LSB_DEFAULT ......... 0xffffffff 
-            IC_SS_SCL_HIGH_COUNT .............. 0x0028 
-            IC_SS_SCL_LOW_COUNT ............... 0x002f 
-            IC_MAX_SPEED_MODE ................. 0x2 
-            IC_STAT_FOR_CLK_STRETCH ........... 0x0 
-            IC_STOP_DET_IF_MASTER_ACTIVE ...... 0x0 
-            IC_DEFAULT_UFM_SPKLEN ............. 0x1 
+            IC_ULTRA_FAST_MODE ................ 0x0
+            IC_UFM_TBUF_CNT_DEFAULT ........... 0x8
+            IC_UFM_SCL_LOW_COUNT .............. 0x0008
+            IC_UFM_SCL_HIGH_COUNT ............. 0x0006
+            IC_TX_TL .......................... 0x0
+            IC_TX_CMD_BLOCK ................... 0x1
+            IC_HAS_DMA ........................ 0x1
+            IC_HAS_ASYNC_FIFO ................. 0x0
+            IC_SMBUS_ARP ...................... 0x0
+            IC_FIRST_DATA_BYTE_STATUS ......... 0x1
+            IC_INTR_IO ........................ 0x1
+            IC_MASTER_MODE .................... 0x1
+            IC_DEFAULT_ACK_GENERAL_CALL ....... 0x1
+            IC_INTR_POL ....................... 0x1
+            IC_OPTIONAL_SAR ................... 0x0
+            IC_DEFAULT_TAR_SLAVE_ADDR ......... 0x055
+            IC_DEFAULT_SLAVE_ADDR ............. 0x055
+            IC_DEFAULT_HS_SPKLEN .............. 0x1
+            IC_FS_SCL_HIGH_COUNT .............. 0x0006
+            IC_HS_SCL_LOW_COUNT ............... 0x0008
+            IC_DEVICE_ID_VALUE ................ 0x0
+            IC_10BITADDR_MASTER ............... 0x0
+            IC_CLK_FREQ_OPTIMIZATION .......... 0x0
+            IC_DEFAULT_FS_SPKLEN .............. 0x7
+            IC_ADD_ENCODED_PARAMS ............. 0x0
+            IC_DEFAULT_SDA_HOLD ............... 0x000001
+            IC_DEFAULT_SDA_SETUP .............. 0x64
+            IC_AVOID_RX_FIFO_FLUSH_ON_TX_ABRT . 0x0
+            IC_CLOCK_PERIOD ................... 100
+            IC_EMPTYFIFO_HOLD_MASTER_EN ....... 1
+            IC_RESTART_EN ..................... 0x1
+            IC_TX_CMD_BLOCK_DEFAULT ........... 0x0
+            IC_BUS_CLEAR_FEATURE .............. 0x0
+            IC_CAP_LOADING .................... 100
+            IC_FS_SCL_LOW_COUNT ............... 0x000d
+            APB_DATA_WIDTH .................... 32
+            IC_SDA_STUCK_TIMEOUT_DEFAULT ...... 0xffffffff
+            IC_SLV_DATA_NACK_ONLY ............. 0x1
+            IC_10BITADDR_SLAVE ................ 0x0
+            IC_CLK_TYPE ....................... 0x0
+            IC_SMBUS_UDID_MSB ................. 0x0
+            IC_SMBUS_SUSPEND_ALERT ............ 0x0
+            IC_HS_SCL_HIGH_COUNT .............. 0x0006
+            IC_SLV_RESTART_DET_EN ............. 0x1
+            IC_SMBUS .......................... 0x0
+            IC_OPTIONAL_SAR_DEFAULT ........... 0x0
+            IC_PERSISTANT_SLV_ADDR_DEFAULT .... 0x0
+            IC_USE_COUNTS ..................... 0x0
+            IC_RX_BUFFER_DEPTH ................ 16
+            IC_SCL_STUCK_TIMEOUT_DEFAULT ...... 0xffffffff
+            IC_RX_FULL_HLD_BUS_EN ............. 0x1
+            IC_SLAVE_DISABLE .................. 0x1
+            IC_RX_TL .......................... 0x0
+            IC_DEVICE_ID ...................... 0x0
+            IC_HC_COUNT_VALUES ................ 0x0
+            I2C_DYNAMIC_TAR_UPDATE ............ 0
+            IC_SMBUS_CLK_LOW_MEXT_DEFAULT ..... 0xffffffff
+            IC_SMBUS_CLK_LOW_SEXT_DEFAULT ..... 0xffffffff
+            IC_HS_MASTER_CODE ................. 0x1
+            IC_SMBUS_RST_IDLE_CNT_DEFAULT ..... 0xffff
+            IC_SMBUS_UDID_LSB_DEFAULT ......... 0xffffffff
+            IC_SS_SCL_HIGH_COUNT .............. 0x0028
+            IC_SS_SCL_LOW_COUNT ............... 0x002f
+            IC_MAX_SPEED_MODE ................. 0x2
+            IC_STAT_FOR_CLK_STRETCH ........... 0x0
+            IC_STOP_DET_IF_MASTER_ACTIVE ...... 0x0
+            IC_DEFAULT_UFM_SPKLEN ............. 0x1
             IC_TX_BUFFER_DEPTH ................ 16 (I2C0)
   */
 
@@ -1930,7 +1930,7 @@ typedef struct {                                /*!< BUSCTRL Structure          
 
 
 /**
-  * @brief Single-cycle IO block 
+  * @brief Single-cycle IO block
             Provides core-local and inter-core hardware for the two processors, with single-cycle access. (SIO)
   */
 

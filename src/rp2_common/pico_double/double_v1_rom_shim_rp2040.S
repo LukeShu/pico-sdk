@@ -1246,7 +1246,7 @@ regular_func double2fix64_shim
  eors r1,r1,r0                 @ generate extreme fixed-point values
  pop {r15}
 
-double_section double2uint64_shim 
+double_section double2uint64_shim
  regular_func double2uint64_shim
  movs r2,#0                    @ and fall through
 regular_func double2ufix64_shim
@@ -1270,12 +1270,12 @@ d2fix:
  asrs r3,r1,#31
  ldr r4, =d2fix_a
  bx r4
- 
+
 ret_dzero:
  movs r0,#0
  movs r1,#0
  bx r14
- 
+
 .weak d2fix_a // weak because it exists in float code too
 .thumb_func
 d2fix_a:

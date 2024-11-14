@@ -460,7 +460,7 @@ static inline void dma_channel_configure(uint channel, const dma_channel_config 
  * \param read_addr Sets the initial read address
  * \param transfer_count Number of transfers to make. Not bytes, but the number of transfers of channel_config_set_transfer_data_size() to be sent.
  */
-inline static void __attribute__((always_inline)) dma_channel_transfer_from_buffer_now(uint channel, 
+inline static void __attribute__((always_inline)) dma_channel_transfer_from_buffer_now(uint channel,
                                                                                        const volatile void *read_addr,
                                                                                        uint32_t transfer_count) {
 //    check_dma_channel_param(channel);

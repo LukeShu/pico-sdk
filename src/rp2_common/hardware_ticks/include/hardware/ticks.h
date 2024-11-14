@@ -11,13 +11,13 @@
  *  \defgroup hardware_ticks hardware_ticks
  *
  * \brief Hardware Tick API
- * 
+ *
  * \if rp2040_specific
  * RP2040 only has one tick generator, and it is part of the watchdog hardware.
  * \endif
- * 
+ *
  * \if rp2350_specific
- * The RP2350 has a dedicated Tick block that is used to supply ticks to TIMER0, TIMER1, 
+ * The RP2350 has a dedicated Tick block that is used to supply ticks to TIMER0, TIMER1,
  * RISC-V platform timer, Arm Cortex-M33 0 timer, Arm Cortex-M33 1 timer and the WATCHDOG block.
  * \endif
  */
