@@ -31,7 +31,7 @@ if (NOT TARGET pico_int64_ops)
 
     macro(pico_set_int64_ops_implementation TARGET IMPL)
         get_target_property(target_type ${TARGET} TYPE)
-        if ("EXECUTABLE" STREQUAL "${target_type}")
+        if ("EXECUTABLE" STREQUAL "${target_type}" OR "OBJECT_LIBRARY" STREQUAL "${target_type}")
             set_target_properties(${TARGET} PROPERTIES PICO_TARGET_INT64_OPS_IMPL "pico_int64_ops_${IMPL}")
         else()
             message(FATAL_ERROR "int64_ops implementation must be set on executable not library")

@@ -44,7 +44,7 @@ if (NOT TARGET pico_printf)
 
     macro(pico_set_printf_implementation TARGET IMPL)
         get_target_property(target_type ${TARGET} TYPE)
-        if ("EXECUTABLE" STREQUAL "${target_type}")
+        if ("EXECUTABLE" STREQUAL "${target_type}" OR "OBJECT_LIBRARY" STREQUAL "${target_type}")
             set_target_properties(${TARGET} PROPERTIES PICO_TARGET_PRINTF_IMPL "pico_printf_${IMPL}")
         else()
             message(FATAL_ERROR "printf implementation must be set on executable not library")
