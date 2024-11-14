@@ -44,7 +44,7 @@ def gpiopxsc(val):
         return "clr"
     else:
         return "unknown"
-    
+
 def gpioxsc2(val):
     val = int(val)
     return gpiopxsc(val - 4) + ("2" if val > 4 else "")

@@ -9,7 +9,7 @@ if (NOT TARGET pico_stdio)
     pico_add_library(pico_stdio_usb)
     pico_add_library(pico_stdio_uart)
     pico_add_library(pico_stdio_semihosting)
-    
+
     function(pico_enable_stdio_uart)
     endfunction()
     function(pico_enable_stdio_usb)

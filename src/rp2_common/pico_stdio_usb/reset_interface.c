@@ -54,7 +54,7 @@ static const uint8_t desc_ms_os_20[] =
     // MS OS 2.0 Compatible ID descriptor: length, type, compatible ID, sub compatible ID
     U16_TO_U8S_LE(0x0014), U16_TO_U8S_LE(MS_OS_20_FEATURE_COMPATBLE_ID), 'W', 'I', 'N', 'U', 'S', 'B', 0x00, 0x00,
     0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, // sub-compatible
-    
+
     // MS OS 2.0 Registry property descriptor: length, type
     U16_TO_U8S_LE(0x0080), U16_TO_U8S_LE(MS_OS_20_FEATURE_REG_PROPERTY),
     U16_TO_U8S_LE(0x0001), U16_TO_U8S_LE(0x0028), // wPropertyDataType, wPropertyNameLength and PropertyName "DeviceInterfaceGUID" in UTF-16

@@ -47,5 +47,5 @@ if (NOT TARGET pico_bit_ops)
             message(FATAL_ERROR "bit_ops implementation must be set on executable not library")
         endif()
     endmacro()
-    
+
 endif()

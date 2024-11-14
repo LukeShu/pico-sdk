@@ -19,7 +19,7 @@ read_flash_sreg:
     str r0, [r3, #SSI_DR0_OFFSET]
     // Dummy byte:
     str r0, [r3, #SSI_DR0_OFFSET]
-    
+
     bl wait_ssi_ready
     // Discard first byte and combine the next two
     ldr r0, [r3, #SSI_DR0_OFFSET]

@@ -10,7 +10,7 @@
 /** \file pico/async_context.h
  *  \defgroup async_context_freertos async_context_freertos
  *  \ingroup pico_async_context
- *  
+ *
  * \brief async_context_freertos provides an implementation of \ref async_context that handles asynchronous
  * work in a separate FreeRTOS task.
  */
@@ -44,7 +44,7 @@ typedef struct async_context_freertos async_context_freertos_t;
 #endif
 #endif
 
-/** 
+/**
  * \brief Configuration object for async_context_freertos instances.
  */
 typedef struct async_context_freertos_config {
@@ -81,7 +81,7 @@ struct async_context_freertos {
  *
  * If this method succeeds (returns true), then the async_context is available for use
  * and can be de-initialized by calling async_context_deinit().
- * 
+ *
  * \param self a pointer to async_context_freertos structure to initialize
  * \param config the configuration object specifying characteristics for the async_context
  * \return true if initialization is successful, false otherwise
@@ -89,7 +89,7 @@ struct async_context_freertos {
 bool async_context_freertos_init(async_context_freertos_t *self, async_context_freertos_config_t *config);
 
 /*!
- * \brief Return a copy of the default configuration object used by \ref async_context_freertos_init_with_defaults() 
+ * \brief Return a copy of the default configuration object used by \ref async_context_freertos_init_with_defaults()
  * \ingroup async_context_freertos
  *
  * The caller can then modify just the settings it cares about, and call \ref async_context_freertos_init()
@@ -113,7 +113,7 @@ bool async_context_freertos_init(async_context_freertos_t *self, async_context_f
  *
  * If this method succeeds (returns true), then the async_context is available for use
  * and can be de-initialized by calling async_context_deinit().
- * 
+ *
  * \param self a pointer to async_context_freertos structure to initialize
  * \return true if initialization is successful, false otherwise
  */

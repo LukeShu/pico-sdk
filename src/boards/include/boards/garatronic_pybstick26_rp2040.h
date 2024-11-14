@@ -36,13 +36,13 @@
 
 // --- I2C ---
 #ifndef PICO_DEFAULT_I2C
-#define PICO_DEFAULT_I2C 1 
+#define PICO_DEFAULT_I2C 1
 #endif
 #ifndef PICO_DEFAULT_I2C_SDA_PIN
 #define PICO_DEFAULT_I2C_SDA_PIN 6
 #endif
 #ifndef PICO_DEFAULT_I2C_SCL_PIN
-#define PICO_DEFAULT_I2C_SCL_PIN 7 
+#define PICO_DEFAULT_I2C_SCL_PIN 7
 #endif
 
 // --- SPI ---
@@ -67,7 +67,7 @@
 #define PICO_BOOT_STAGE2_CHOOSE_W25Q080 1
 
 #ifndef PICO_FLASH_SPI_CLKDIV
-#define PICO_FLASH_SPI_CLKDIV 2 
+#define PICO_FLASH_SPI_CLKDIV 2
 #endif
 
 // pico_cmake_set_default PICO_FLASH_SIZE_BYTES = (1 * 1024 * 1024)
@@ -79,7 +79,7 @@
 //#define PICO_SMPS_MODE_PIN 23
 
 // All boards have B1 RP2040
-#ifndef PICO_RP2040_B0_SUPPORTED 
+#ifndef PICO_RP2040_B0_SUPPORTED
 #define PICO_RP2040_B0_SUPPORTED  0
 #endif
 

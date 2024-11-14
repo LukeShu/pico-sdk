@@ -112,19 +112,19 @@
 //------------- ADC -------------//
 #ifndef PICO_ADC_A0_PIN
 #define PICO_ADC_A0_PIN 26
-#endif 
+#endif
 
 #ifndef PICO_ADC_A1_PIN
 #define PICO_ADC_A1_PIN 27
-#endif 
+#endif
 
 #ifndef PICO_ADC_A2_PIN
 #define PICO_ADC_A2_PIN 28
-#endif 
+#endif
 
 #ifndef PICO_ADC_BAT_PIN
 #define PICO_ADC_BAT_PIN 29
-#endif 
+#endif
 #ifndef PICO_ADC_BAT_EN_PIN
 #define PICO_ADC_BAT_EN_PIN 19
 #endif

@@ -36,7 +36,7 @@ read_flash_sreg:
     str r0, [r3, #QMI_DIRECT_TX_OFFSET]
     // Dummy byte:
     str r0, [r3, #QMI_DIRECT_TX_OFFSET]
-    
+
     bl wait_qmi_ready
     // Discard first byte, return second
     ldr r0, [r3, #QMI_DIRECT_RX_OFFSET]

@@ -375,7 +375,7 @@ float_wrapper_section fsin_fcos
  vrintn.f32.f32 s4,s4        @ round to quadrant count: x<256 so count≤163
  ble 40b                     @ then do heavy-duty range reduction
  vfms.f32 s0,s4,s7
- vfms.f32 s0,s4,s6 
+ vfms.f32 s0,s4,s6
  vmov r3,s0                  @ reduced angle
  vcvt.s32.f32 s3,s4
  ubfx r2,r3,#23,#8           @ get exponent
@@ -654,7 +654,7 @@ float_wrapper_section atan2f
 @ here both x and y are zeros
  orr r1,r1,0x3f800000        @ retry with x replaced by ~1 with appropriate sign
  b 86f
- 
+
 81:
  and r2,#0x80000000
 82:

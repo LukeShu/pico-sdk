@@ -381,7 +381,7 @@ void cyw43_arch_disable_sta_mode(void);
  *             \ref CYW43_AUTH_WPA2_AES_PSK, or \ref CYW43_AUTH_WPA2_MIXED_PSK (see \ref CYW43_AUTH_)
  */
 void cyw43_arch_enable_ap_mode(const char *ssid, const char *password, uint32_t auth);
-    
+
 /*!
  * \brief Disables Wi-Fi AP (Access point) mode.
  * \ingroup pico_cyw43_arch

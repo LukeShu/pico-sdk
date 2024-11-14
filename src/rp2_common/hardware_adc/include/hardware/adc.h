@@ -119,7 +119,7 @@ static inline void adc_select_input(uint input) {
  *  \ingroup hardware_adc
  *
  * \return The currently selected input channel.
- * 
+ *
  * \if rp2040_specific
  * On RP02040 0...3 are GPIOs 26...29 respectively. Input 4 is the onboard temperature sensor.
  * \endif
@@ -211,7 +211,7 @@ static inline void adc_set_clkdiv(float clkdiv) {
  * \if rp2350_specific
  * On RP2350 the FIFO is 8 samples long.
  * \endif
- * 
+ *
  * If a conversion is completed and the FIFO is full, the result is dropped.
  *
  * \param en Enables write each conversion result to the FIFO
@@ -253,7 +253,7 @@ static inline bool adc_fifo_is_empty(void) {
  * \if rp2350_specific
  * On RP2350 the FIFO is 8 samples long.
  * \endif
- * 
+ *
  * This function will return how many samples are currently present.
  */
 static inline uint8_t adc_fifo_get_level(void) {
