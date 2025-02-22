@@ -23,7 +23,7 @@ void watchdog_start_tick(uint cycles) {
 // tag::watchdog_update[]
 static uint32_t load_value;
 
-void watchdog_update(void) {
+void __no_inline_not_in_flash_func(watchdog_update)(void) {
     watchdog_hw->load = load_value;
 }
 // end::watchdog_update[]
@@ -40,7 +40,7 @@ uint32_t watchdog_get_time_remaining_ms(void) {
 #endif
 // tag::watchdog_enable[]
 // Helper function used by both watchdog_enable and watchdog_reboot
-void _watchdog_enable(uint32_t delay_ms, bool pause_on_debug) {
+void __no_inline_not_in_flash_func(_watchdog_enable)(uint32_t delay_ms, bool pause_on_debug) {
     valid_params_if(HARDWARE_WATCHDOG, delay_ms <= WATCHDOG_LOAD_BITS / (1000 * WATCHDOG_XFACTOR));
     hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
 
@@ -87,7 +87,7 @@ void watchdog_disable(void) {
     hw_clear_bits(&watchdog_hw->ctrl, WATCHDOG_CTRL_ENABLE_BITS);
 }
 
-void watchdog_reboot(uint32_t pc, uint32_t sp, uint32_t delay_ms) {
+void __no_inline_not_in_flash_func(watchdog_reboot)(uint32_t pc, uint32_t sp, uint32_t delay_ms) {
     check_hw_layout(watchdog_hw_t, scratch[7], WATCHDOG_SCRATCH7_OFFSET);
 
     // Clear enable before setting up scratch registers
