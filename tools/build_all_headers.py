@@ -23,9 +23,6 @@ IGNORE_DIRS.add('common/boot_uf2')
 IGNORE_DIRS.add('common/pico_usb_reset_interface')
 IGNORE_DIRS.add('rp2_common/cmsis')
 IGNORE_DIRS.add('rp2_common/pico_async_context')
-IGNORE_DIRS.add('rp2_common/pico_btstack')
-IGNORE_DIRS.add('rp2_common/pico_cyw43_arch')
-IGNORE_DIRS.add('rp2_common/pico_cyw43_driver')
 IGNORE_DIRS.add('rp2_common/pico_lwip')
 IGNORE_DIRS.add('rp2_common/pico_stdio_semihosting')
 IGNORE_DIRS.add('rp2_common/pico_stdio_usb')
@@ -84,4 +81,3 @@ with open(output_header, 'w') as fh:
         fh.write('#include "{}"\n'.format(f))
         last_location = include_locations[f]
     fh.write('\n')
-

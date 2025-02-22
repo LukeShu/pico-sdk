@@ -40,9 +40,6 @@
 #include "pico/binary_info.h"
 #include "pico/bit_ops.h"
 #include "pico/bootrom.h"
-#if LIB_PICO_CYW43_ARCH
-#include "pico/cyw43_arch.h"
-#endif
 #include "pico/divider.h"
 // todo we should have this but right now double.h is only present with double_implementation == pico
 #if PICO_RP2040
