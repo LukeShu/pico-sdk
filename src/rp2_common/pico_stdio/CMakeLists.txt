@@ -16,15 +16,9 @@ if (NOT TARGET pico_stdio)
             ${CMAKE_CURRENT_LIST_DIR}/stdio.c
     )
 
-    pico_wrap_function(pico_stdio printf) # here not pico_printf as we do mutex
-    pico_wrap_function(pico_stdio vprintf) # here not pico_printf as we do mutex
     pico_wrap_function(pico_stdio puts)
     pico_wrap_function(pico_stdio putchar)
     pico_wrap_function(pico_stdio getchar)
-
-    if (TARGET pico_printf)
-        pico_mirrored_target_link_libraries(pico_stdio INTERFACE pico_printf)
-    endif()
 
     function(pico_enable_stdio_uart TARGET ENABLED)
         set_target_properties(${TARGET} PROPERTIES PICO_TARGET_STDIO_UART ${ENABLED})

@@ -104,7 +104,6 @@ if (NOT PICO_BARE_METAL)
     pico_add_subdirectory(rp2_common/pico_float)
     pico_add_subdirectory(rp2_common/pico_mem_ops)
     pico_add_subdirectory(rp2_common/pico_malloc)
-    pico_add_subdirectory(rp2_common/pico_printf)
     pico_add_subdirectory(rp2_common/pico_rand)
 
     if (PICO_RP2350 OR PICO_COMBINED_DOCS)

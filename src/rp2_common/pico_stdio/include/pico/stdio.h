@@ -31,11 +31,6 @@
 #define PICO_STDIO_DEFAULT_CRLF 1
 #endif
 
-// PICO_CONFIG: PICO_STDIO_STACK_BUFFER_SIZE, Define printf buffer size (on stack)... this is just a working buffer not a max output size, min=0, max=512, default=128, group=pico_stdio
-#ifndef PICO_STDIO_STACK_BUFFER_SIZE
-#define PICO_STDIO_STACK_BUFFER_SIZE 128
-#endif
-
 // PICO_CONFIG: PICO_STDIO_DEADLOCK_TIMEOUT_MS, Time after which to assume stdio_usb is deadlocked by use in IRQ and give up, type=int, default=1000, group=pico_stdio
 #ifndef PICO_STDIO_DEADLOCK_TIMEOUT_MS
 #define PICO_STDIO_DEADLOCK_TIMEOUT_MS 1000
@@ -206,20 +201,6 @@ int stdio_putchar(int);
  * \ingroup pico_stdio
  */
 int stdio_puts(const char *s);
-
-/*! \brief stdio_getchar Alias for \ref vprintf that definitely does not go thru the implementation
- * in the standard C library even when \ref PICO_STDIO_SHORT_CIRCUIT_CLIB_FUNCS == 0
- *
- * \ingroup pico_stdio
- */
-int stdio_vprintf(const char *format, va_list va);
-
-/*! \brief stdio_getchar Alias for \ref printf that definitely does not go thru the implementation
- * in the standard C library even when \ref PICO_STDIO_SHORT_CIRCUIT_CLIB_FUNCS == 0
- *
- * \ingroup pico_stdio
- */
-int __printflike(1, 0) stdio_printf(const char* format, ...);
 
 #ifdef __cplusplus
 }

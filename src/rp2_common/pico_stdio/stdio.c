@@ -9,9 +9,6 @@
 #include <stdarg.h>
 
 #include "pico.h"
-#if LIB_PICO_PRINTF_PICO
-#include "pico/printf.h"
-#endif
 #include "pico/stdio.h"
 #include "pico/stdio/driver.h"
 #include "pico/time.h"
@@ -171,32 +168,6 @@ void stdio_flush(void) {
     }
 }
 
-#if LIB_PICO_PRINTF_PICO
-typedef struct stdio_stack_buffer {
-    int used;
-    char buf[PICO_STDIO_STACK_BUFFER_SIZE];
-} stdio_stack_buffer_t;
-
-static void stdio_stack_buffer_flush(stdio_stack_buffer_t *buffer) {
-    if (buffer->used) {
-        for (stdio_driver_t *d = drivers; d; d = d->next) {
-            if (!d->out_chars) continue;
-            if (filter && filter != d) continue;
-            stdio_out_chars_crlf(d, buffer->buf, buffer->used);
-        }
-        buffer->used = 0;
-    }
-}
-
-static void stdio_buffered_printer(char c, void *arg) {
-    stdio_stack_buffer_t *buffer = (stdio_stack_buffer_t *)arg;
-    if (buffer->used == PICO_STDIO_STACK_BUFFER_SIZE) {
-        stdio_stack_buffer_flush(buffer);
-    }
-    buffer->buf[buffer->used++] = c;
-}
-#endif
-
 bool stdio_init_all(void) {
     // todo add explicit custom, or registered although you can call stdio_enable_driver explicitly anyway
     // These are well known ones
@@ -312,60 +283,17 @@ int PRIMARY_STDIO_FUNC(puts)(const char *s) {
     return len;
 }
 
-int REAL_FUNC(vprintf)(const char *format, va_list va);
-
-int PRIMARY_STDIO_FUNC(vprintf)(const char *format, va_list va) {
-    bool serialzed = stdout_serialize_begin();
-    if (!serialzed) {
-#if PICO_STDIO_IGNORE_NESTED_STDOUT
-        return 0;
-#endif
-    }
-    int ret;
-#if LIB_PICO_PRINTF_PICO
-    struct stdio_stack_buffer buffer;
-    buffer.used = 0;
-    ret = vfctprintf(stdio_buffered_printer, &buffer, format, va);
-    stdio_stack_buffer_flush(&buffer);
-    stdio_flush();
-#elif LIB_PICO_PRINTF_NONE
-    ((void)format);
-    ((void)va);
-    extern void printf_none_assert(void);
-    printf_none_assert();
-    ret = 0;
-#else
-    ret = REAL_FUNC(vprintf)(format, va);
-#endif
-    if (serialzed) {
-        stdout_serialize_end();
-    }
-    return ret;
-}
-
-int __printflike(1, 0) PRIMARY_STDIO_FUNC(printf)(const char* format, ...)
-{
-    va_list va;
-    va_start(va, format);
-    int ret = vprintf(format, va);
-    va_end(va);
-    return ret;
-}
-
 #if PICO_STDIO_SHORT_CIRCUIT_CLIB_FUNCS
 // define the stdio_ versions to be the same as our wrappers
 int stdio_getchar(void) __attribute__((alias(__XSTRING(WRAPPER_FUNC(getchar)))));
 int stdio_putchar(int) __attribute__((alias(__XSTRING(WRAPPER_FUNC(putchar)))));
 int stdio_puts(const char *s) __attribute__((alias(__XSTRING(WRAPPER_FUNC(puts)))));
-int stdio_vprintf(const char *format, va_list va) __attribute__((alias(__XSTRING(WRAPPER_FUNC(vprintf)))));
-int __printflike(1, 0) stdio_printf(const char* format, ...) __attribute__((alias(__XSTRING(WRAPPER_FUNC(printf)))));
 #else
 // todo there is no easy way to avoid the wrapper functions since they are in the CMake, so lets just forward for now
 
 int REAL_FUNC(getchar)(void);
 int REAL_FUNC(putchar)(int);
 int REAL_FUNC(puts)(const char *s);
-int __printflike(1, 0) REAL_FUNC(printf)(const char* format, ...);
 
 int WRAPPER_FUNC(getchar)(void) {
     return REAL_FUNC(getchar)();
@@ -376,16 +304,4 @@ int WRAPPER_FUNC(putchar)(int c) {
 int WRAPPER_FUNC(puts)(const char *s) {
     return REAL_FUNC(puts)(s);
 }
-int WRAPPER_FUNC(vprintf)(const char *format, va_list va) {
-    return REAL_FUNC(vprintf)(format, va);
-}
-int __printflike(1, 0) WRAPPER_FUNC(printf)(const char* format, ...) {
-    va_list va;
-    va_start(va, format);
-    int ret = REAL_FUNC(vprintf)(format, va);
-    va_end(va);
-    return ret;
-}
 #endif
-
-

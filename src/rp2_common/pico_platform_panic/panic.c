@@ -10,13 +10,6 @@
 #include <unistd.h>
 #include "pico.h"
 
-#if LIB_PICO_PRINTF_PICO
-#include "pico/printf.h"
-#else
-#define weak_raw_printf printf
-#define weak_raw_vprintf vprintf
-#endif
-
 void __attribute__((noreturn)) panic_unsupported(void) {
     panic("not supported");
 }
@@ -64,19 +57,11 @@ void __attribute__((naked, noreturn)) __printflike(1, 0) panic(__unused const ch
 void __attribute__((noreturn)) __printflike(1, 0) panic(const char *fmt, ...) {
     puts("\n*** PANIC ***\n");
     if (fmt) {
-#if LIB_PICO_PRINTF_NONE
-        puts(fmt);
-#else
         va_list args;
         va_start(args, fmt);
-#if PICO_PRINTF_ALWAYS_INCLUDED
         vprintf(fmt, args);
-#else
-        weak_raw_vprintf(fmt, args);
-#endif
         va_end(args);
         puts("\n");
-#endif
     }
 
     _exit(1);

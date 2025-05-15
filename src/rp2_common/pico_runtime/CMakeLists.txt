@@ -32,7 +32,6 @@ set(PICO_RUNTIME_LIBRARIES
         pico_standard_binary_info
         pico_standard_link
         pico_sync
-        pico_printf
         pico_crt0
         pico_clib_interface
         pico_stdio
@@ -56,21 +55,14 @@ endif()
 # INCLUDE/EXCLUDE can contain any of the following (all defaulting to not included)
 #
 # DEFAULT_ALARM_POOL    - default alarm pool setup
-# PRINTF                - full printf support
-# PRINTF_MINIMAL        - printf support without the following
-# PRINTF_FLOAT          - to control float support if printf is enabled
-# PRINTF_EXPONENTIAL
-# PRINTF_LONG_LONG
-# PRINTF_PTRDIFF_T
 # FLOAT                 - support for single-precision floating point
 # DOUBLE                - support for double-precision floating point
 # FPGA_CHECK            - checks for FPGA which allows Raspberry Pi to run your binary on FPGA
 # PANIC                 - default panic impl which brings in stdio
-# AUTO_INIT_MUTEX       - auto init mutexes; without this you get no printf mutex either               -
+# AUTO_INIT_MUTEX       - auto init mutexes
 function(pico_minimize_runtime TARGET)
     set(ALL_ITEMS
             DEFAULT_ALARM_POOL
-            PRINTF
             FLOAT
             DOUBLE
             FPGA_CHECK
@@ -105,29 +97,6 @@ function(pico_minimize_runtime TARGET)
     endif()
     if (NOT RUNTIME_INCLUDE_AUTO_INIT_MUTEX)
         target_compile_definitions(${TARGET} PRIVATE PICO_RUNTIME_SKIP_INIT_MUTEX=1)
-    endif()
-
-    if (RUNTIME_INCLUDE_PRINTF)
-        if (NOT RUNTIME_INCLUDE_PRINTF_MINIMAL)
-            set( RUNTIME_INCLUDE_PRINTF_FLOAT 1)
-            set( RUNTIME_INCLUDE_PRINTF_EXPONENTIAL 1)
-            set( RUNTIME_INCLUDE_PRINTF_LONG_LONG 1)
-            set( RUNTIME_INCLUDE_PRINTF_PTRDIFF_T 1)
-        endif()
-        if (NOT RUNTIME_INCLUDE_PRINTF_FLOAT)
-            target_compile_definitions(${TARGET} PRIVATE PICO_PRINTF_SUPPORT_FLOAT=0)
-        endif()
-        if (NOT RUNTIME_INCLUDE_PRINTF_EXPONENTIAL)
-            target_compile_definitions(${TARGET} PRIVATE PICO_PRINTF_SUPPORT_EXPONENTIAL=0)
-        endif()
-        if (NOT RUNTIME_INCLUDE_PRINTF_LONG_LONG)
-            target_compile_definitions(${TARGET} PRIVATE PICO_PRINTF_SUPPORT_LONG_LONG=0)
-        endif()
-        if (NOT RUNTIME_INCLUDE_PRINTF_PTRDIFF_T)
-            target_compile_definitions(${TARGET} PRIVATE PICO_PRINTF_SUPPORT_PTRDIFF_T=0)
-        endif()
-    else()
-        pico_set_printf_implementation(${TARGET} none)
     endif()
 
     if (NOT RUNTIME_INCLUDE_PANIC)

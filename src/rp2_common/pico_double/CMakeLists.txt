@@ -50,10 +50,6 @@ if (NOT TARGET pico_double)
 
     target_link_libraries(pico_double_none INTERFACE pico_double_headers)
 
-    target_compile_definitions(pico_double_none_headers INTERFACE
-            PICO_PRINTF_SUPPORT_FLOAT=0 # printing floats/doubles won't work, so we can save space by removing it
-    )
-
     function(wrap_double_functions TARGET)
         pico_wrap_function(${TARGET} __aeabi_dadd)
         pico_wrap_function(${TARGET} __aeabi_ddiv)

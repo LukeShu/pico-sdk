@@ -28,7 +28,6 @@
 * * \ref pico_standard_binary_info
 * * \ref pico_standard_link
 * * \ref pico_sync
-* * \ref pico_printf
 * * \ref pico_crt0
 * * \ref pico_clib_interface
 * * \ref pico_stdio

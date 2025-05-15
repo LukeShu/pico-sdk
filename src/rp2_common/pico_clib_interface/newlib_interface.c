@@ -17,12 +17,6 @@
 #include "pico/time.h"
 #include "pico/runtime_init.h"
 
-#if LIB_PICO_PRINTF_PICO
-#include "pico/printf.h"
-#else
-#define weak_raw_printf printf
-#define weak_raw_vprintf vprintf
-#endif
 #if LIB_PICO_STDIO
 #include "pico/stdio.h"
 #endif
@@ -156,18 +150,6 @@ int __attribute__((weak)) _isatty(int fd) {
 void exit(int status) {
     _exit(status);
 }
-
-// incorrect warning from GCC 6
-GCC_Pragma("GCC diagnostic push")
-GCC_Pragma("GCC diagnostic ignored \"-Wsuggest-attribute=format\"")
-void __weak __assert_func(const char *file, int line, const char *func, const char *failedexpr) {
-    weak_raw_printf("assertion \"%s\" failed: file \"%s\", line %d%s%s\n",
-                    failedexpr, file, line, func ? ", function: " : "",
-                    func ? func : "");
-
-    _exit(1);
-}
-GCC_Pragma("GCC diagnostic pop")
 
 void runtime_init(void) {
 #ifndef NDEBUG
