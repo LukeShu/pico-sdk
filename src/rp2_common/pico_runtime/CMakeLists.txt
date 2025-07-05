@@ -25,7 +25,6 @@ set(PICO_RUNTIME_LIBRARIES
         pico_double
         pico_int64_ops
         pico_float
-        pico_malloc
         pico_mem_ops
         pico_atomic
         pico_cxx_options

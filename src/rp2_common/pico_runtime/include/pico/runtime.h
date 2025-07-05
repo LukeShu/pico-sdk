@@ -21,7 +21,6 @@
 * * \ref pico_double
 * * \ref pico_int64_ops
 * * \ref pico_float
-* * \ref pico_malloc
 * * \ref pico_mem_ops
 * * \ref pico_atomic
 * * \ref pico_cxx_options
