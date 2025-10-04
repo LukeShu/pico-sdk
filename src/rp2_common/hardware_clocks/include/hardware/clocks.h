@@ -165,129 +165,130 @@ extern "C" {
 // \end::pll_settings[]
 
 #ifndef PLL_COMMON_REFDIV
-// backwards compatibility, but now deprecated
-#define PLL_COMMON_REFDIV 1
+    // backwards compatibility, but now deprecated
+    #define PLL_COMMON_REFDIV 1
 #endif
 
 // PICO_CONFIG: PLL_SYS_REFDIV, PLL reference divider setting for PLL_SYS, type=int, default=1, advanced=true, group=hardware_clocks
 #ifndef PLL_SYS_REFDIV
-// backwards compatibility with deprecated PLL_COMMON_REFDIV
-#ifdef PLL_COMMON_REFDIV
-#define PLL_SYS_REFDIV                   PLL_COMMON_REFDIV
-#else
-#define PLL_SYS_REFDIV                   1
-#endif
+    // backwards compatibility with deprecated PLL_COMMON_REFDIV
+    #ifdef PLL_COMMON_REFDIV
+        #define PLL_SYS_REFDIV                   PLL_COMMON_REFDIV
+    #else
+        #define PLL_SYS_REFDIV                   1
+    #endif
 #endif
 
 #ifndef PLL_SYS_VCO_FREQ_HZ
-// For backwards compatibility define PLL_SYS_VCO_FREQ_HZ if PLL_SYS_VCO_FREQ_KHZ is defined
-#ifdef PLL_SYS_VCO_FREQ_KHZ
-#define PLL_SYS_VCO_FREQ_HZ                (PLL_SYS_VCO_FREQ_KHZ * KHZ)
-#endif
+    // For backwards compatibility define PLL_SYS_VCO_FREQ_HZ if PLL_SYS_VCO_FREQ_KHZ is defined
+    #ifdef PLL_SYS_VCO_FREQ_KHZ
+        #define PLL_SYS_VCO_FREQ_HZ                (PLL_SYS_VCO_FREQ_KHZ * KHZ)
+    #endif
 #endif
 
 #if (SYS_CLK_HZ == 125 * MHZ || SYS_CLK_HZ == 150 * MHZ) && (XOSC_HZ == 12 * MHZ) && (PLL_SYS_REFDIV == 1)
-// PLL settings for standard 125/150 MHz system clock.
-// PICO_CONFIG: PLL_SYS_VCO_FREQ_HZ, System clock PLL frequency, type=int, default=(1500 * MHZ), advanced=true, group=hardware_clocks
-#ifndef PLL_SYS_VCO_FREQ_HZ
-#define PLL_SYS_VCO_FREQ_HZ                (1500 * MHZ)
-#endif
-// PICO_CONFIG: PLL_SYS_POSTDIV1, System clock PLL post divider 1 setting, type=int, default=6 on RP2040 or 5 on RP2350, advanced=true, group=hardware_clocks
-#ifndef PLL_SYS_POSTDIV1
-#if SYS_CLK_HZ == 125 * MHZ
-#define PLL_SYS_POSTDIV1                    6
-#else
-#define PLL_SYS_POSTDIV1                    5
-#endif
-#endif
-// PICO_CONFIG: PLL_SYS_POSTDIV2, System clock PLL post divider 2 setting, type=int, default=2, advanced=true, group=hardware_clocks
-#ifndef PLL_SYS_POSTDIV2
-#define PLL_SYS_POSTDIV2                    2
-#endif
+    // PLL settings for standard 125/150 MHz system clock.
+    // PICO_CONFIG: PLL_SYS_VCO_FREQ_HZ, System clock PLL frequency, type=int, default=(1500 * MHZ), advanced=true, group=hardware_clocks
+    #ifndef PLL_SYS_VCO_FREQ_HZ
+        #define PLL_SYS_VCO_FREQ_HZ                (1500 * MHZ)
+    #endif
+    // PICO_CONFIG: PLL_SYS_POSTDIV1, System clock PLL post divider 1 setting, type=int, default=6 on RP2040 or 5 on RP2350, advanced=true, group=hardware_clocks
+    #ifndef PLL_SYS_POSTDIV1
+        #if SYS_CLK_HZ == 125 * MHZ
+            #define PLL_SYS_POSTDIV1                    6
+        #else
+            #define PLL_SYS_POSTDIV1                    5
+        #endif
+    #endif
+    // PICO_CONFIG: PLL_SYS_POSTDIV2, System clock PLL post divider 2 setting, type=int, default=2, advanced=true, group=hardware_clocks
+    #ifndef PLL_SYS_POSTDIV2
+        #define PLL_SYS_POSTDIV2                    2
+    #endif
 #endif // SYS_CLK_KHZ == 125000 && XOSC_KHZ == 12000 && PLL_COMMON_REFDIV == 1
 
 #if PICO_RP2040 && (SYS_CLK_HZ == 200 * MHZ) && (XOSC_HZ == 12 * MHZ) && (PLL_SYS_REFDIV == 1)
-// PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST, Should the regulator voltage be adjusted above SYS_CLK_VREG_VOLTAGE_MIN when initializing the clocks, type=bool, default=0, advanced=true, group=hardware_clocks
-#ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST
-#define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST 1
-#endif
-// PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_MIN, minimum voltage (see VREG_VOLTAGE_x_xx) for the voltage regulator to be ensured during clock initialization if SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST is 1, type=int, advanced=true, group=hardware_clocks
-#if SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST && !defined(SYS_CLK_VREG_VOLTAGE_MIN)
-#define SYS_CLK_VREG_VOLTAGE_MIN VREG_VOLTAGE_1_15
-#endif
-// PLL settings for fast 200 MHz system clock on RP2040
-#ifndef PLL_SYS_VCO_FREQ_HZ
-#define PLL_SYS_VCO_FREQ_HZ                (1200 * MHZ)
-#endif
-#ifndef PLL_SYS_POSTDIV1
-#define PLL_SYS_POSTDIV1                    6
-#endif
-#ifndef PLL_SYS_POSTDIV2
-#define PLL_SYS_POSTDIV2                    1
-#endif
+    // PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST, Should the regulator voltage be adjusted above SYS_CLK_VREG_VOLTAGE_MIN when initializing the clocks, type=bool, default=0, advanced=true, group=hardware_clocks
+    #ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST
+        #define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST 1
+    #endif
+    // PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_MIN, minimum voltage (see VREG_VOLTAGE_x_xx) for the voltage regulator to be ensured during clock initialization if SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST is 1, type=int, advanced=true, group=hardware_clocks
+    #if SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST && !defined(SYS_CLK_VREG_VOLTAGE_MIN)
+        #define SYS_CLK_VREG_VOLTAGE_MIN VREG_VOLTAGE_1_15
+    #endif
+    // PLL settings for fast 200 MHz system clock on RP2040
+    #ifndef PLL_SYS_VCO_FREQ_HZ
+        #define PLL_SYS_VCO_FREQ_HZ                (1200 * MHZ)
+    #endif
+    #ifndef PLL_SYS_POSTDIV1
+        #define PLL_SYS_POSTDIV1                    6
+    #endif
+    #ifndef PLL_SYS_POSTDIV2
+        #define PLL_SYS_POSTDIV2                    1
+    #endif
 #else
-#ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST
-#define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST 0
-#endif
+    #ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST
+        #define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST 0
+    #endif
 #endif // PICO_RP2040 && SYS_CLK_KHZ == 200000 && XOSC_KHZ == 12000 && PLL_COMMON_REFDIV == 1
 
 // PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US, Number of microseconds to wait after updating regulator voltage due to SYS_CLK_VREG_VOLTAGE_MIN to allow voltage to settle, type=bool, default=1, advanced=true, group=hardware_clocks
 #ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US
-#define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US 1000
+    #define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US 1000
 #endif
 
 #if !defined(PLL_SYS_VCO_FREQ_HZ) || !defined(PLL_SYS_POSTDIV1) || !defined(PLL_SYS_POSTDIV2)
-#error PLL_SYS_VCO_FREQ_HZ, PLL_SYS_POSTDIV1 and PLL_SYS_POSTDIV2 must all be specified when using custom clock setup
+    #error PLL_SYS_VCO_FREQ_HZ, PLL_SYS_POSTDIV1 and PLL_SYS_POSTDIV2 must all be specified when using custom clock setup
 #endif
 
 // PICO_CONFIG: PLL_USB_REFDIV, PLL reference divider setting for PLL_USB, type=int, default=1, advanced=true, group=hardware_clocks
 #ifndef PLL_USB_REFDIV
-// backwards compatibility with deprecated PLL_COMMON_REFDIV
-#ifdef PLL_COMMON_REFDIV
-#define PLL_USB_REFDIV                   PLL_COMMON_REFDIV
-#else
-#define PLL_USB_REFDIV                   1
-#endif
+    // backwards compatibility with deprecated PLL_COMMON_REFDIV
+    #ifdef PLL_COMMON_REFDIV
+        #define PLL_USB_REFDIV                   PLL_COMMON_REFDIV
+    #else
+        #define PLL_USB_REFDIV                   1
+    #endif
 #endif
 
 #ifndef PLL_USB_VCO_FREQ_HZ
-// For backwards compatibility define PLL_USB_VCO_FREQ_HZ if PLL_USB_VCO_FREQ_KHZ is defined
-#ifdef PLL_USB_VCO_FREQ_KHZ
-#define PLL_USB_VCO_FREQ_HZ                 (PLL_USB_VCO_FREQ_KHZ * KHZ)
-#endif
+    // For backwards compatibility define PLL_USB_VCO_FREQ_HZ if PLL_USB_VCO_FREQ_KHZ is defined
+    #ifdef PLL_USB_VCO_FREQ_KHZ
+        #define PLL_USB_VCO_FREQ_HZ                 (PLL_USB_VCO_FREQ_KHZ * KHZ)
+    #endif
 #endif
 
 #if (USB_CLK_HZ == 48 * MHZ) && (XOSC_HZ == 12 * MHZ) && (PLL_USB_REFDIV == 1)
-// PLL settings for a USB clock of 48MHz.
-// PICO_CONFIG: PLL_USB_VCO_FREQ_HZ, USB clock PLL frequency, type=int, default=(1200 * MHZ), advanced=true, group=hardware_clocks
-#ifndef PLL_USB_VCO_FREQ_HZ
-#define PLL_USB_VCO_FREQ_HZ                 (1200 * MHZ)
-#endif
-// PICO_CONFIG: PLL_USB_POSTDIV1, USB clock PLL post divider 1 setting, type=int, default=5, advanced=true, group=hardware_clocks
-#ifndef PLL_USB_POSTDIV1
-#define PLL_USB_POSTDIV1                    5
-#endif
-// PICO_CONFIG: PLL_USB_POSTDIV2, USB clock PLL post divider 2 setting, type=int, default=5, advanced=true, group=hardware_clocks
-#ifndef PLL_USB_POSTDIV2
-#define PLL_USB_POSTDIV2                    5
-#endif
+    // PLL settings for a USB clock of 48MHz.
+    // PICO_CONFIG: PLL_USB_VCO_FREQ_HZ, USB clock PLL frequency, type=int, default=(1200 * MHZ), advanced=true, group=hardware_clocks
+    #ifndef PLL_USB_VCO_FREQ_HZ
+        #define PLL_USB_VCO_FREQ_HZ                 (1200 * MHZ)
+    #endif
+    // PICO_CONFIG: PLL_USB_POSTDIV1, USB clock PLL post divider 1 setting, type=int, default=5, advanced=true, group=hardware_clocks
+    #ifndef PLL_USB_POSTDIV1
+        #define PLL_USB_POSTDIV1                    5
+    #endif
+    // PICO_CONFIG: PLL_USB_POSTDIV2, USB clock PLL post divider 2 setting, type=int, default=5, advanced=true, group=hardware_clocks
+    #ifndef PLL_USB_POSTDIV2
+        #define PLL_USB_POSTDIV2                    5
+    #endif
 #endif // USB_CLK_HZ == 48000000 && XOSC_HZ == 12000000 && PLL_COMMON_REFDIV == 1
+
 #if !defined(PLL_USB_VCO_FREQ_HZ) || !defined(PLL_USB_POSTDIV1) || !defined(PLL_USB_POSTDIV2)
-#error PLL_USB_VCO_FREQ_HZ, PLL_USB_POSTDIV1 and PLL_USB_POSTDIV2 must all be specified when using custom clock setup.
+    #error PLL_USB_VCO_FREQ_HZ, PLL_USB_POSTDIV1 and PLL_USB_POSTDIV2 must all be specified when using custom clock setup.
 #endif
 
 // PICO_CONFIG: PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS, Enable/disable assertions in the hardware_clocks module, type=bool, default=0, group=hardware_clocks
 #ifndef PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS
-#ifdef PARAM_ASSERTIONS_ENABLED_CLOCKS // backwards compatibility with SDK < 2.0.0
-#define PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS PARAM_ASSERTIONS_ENABLED_CLOCKS
-#else
-#define PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS 0
-#endif
+    #ifdef PARAM_ASSERTIONS_ENABLED_CLOCKS // backwards compatibility with SDK < 2.0.0
+        #define PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS PARAM_ASSERTIONS_ENABLED_CLOCKS
+    #else
+        #define PARAM_ASSERTIONS_ENABLED_HARDWARE_CLOCKS 0
+    #endif
 #endif
 
  // PICO_CONFIG: PICO_CLOCK_GPIO_CLKDIV_ROUND_NEAREST, True if floating point GPIO clock divisors should be rounded to the nearest possible clock divisor rather than rounding down, type=bool, default=PICO_CLKDIV_ROUND_NEAREST, group=hardware_clocks
 #ifndef PICO_CLOCK_GPIO_CLKDIV_ROUND_NEAREST
-#define PICO_CLOCK_GPIO_CLKDIV_ROUND_NEAREST PICO_CLKDIV_ROUND_NEAREST
+    #define PICO_CLOCK_GPIO_CLKDIV_ROUND_NEAREST PICO_CLKDIV_ROUND_NEAREST
 #endif
 
 typedef clock_num_t clock_handle_t;
