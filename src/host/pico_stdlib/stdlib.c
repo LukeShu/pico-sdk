@@ -14,14 +14,15 @@ void set_sys_clock_48mhz() {
 
 }
 
-bool check_sys_clock_khz(uint32_t freq_khz, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
+bool check_sys_clock_khz(uint32_t freq_khz, uint *refdiv_out, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
+    *refdiv_out = 0;
     *vco_out = 1000000;
     *postdiv1_out = 0;
     *postdiv2_out = 0;
     return true;
 }
 
-void set_sys_clock_pll(__unused uint32_t vco_freq, __unused uint post_div1, __unused uint post_div2) {
+void set_sys_clock_pll(__unused uint ref_div, __unused uint32_t vco_freq, __unused uint post_div1, __unused uint post_div2) {
 
 }
 

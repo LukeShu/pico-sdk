@@ -377,14 +377,14 @@ void set_sys_clock_48mhz(void) {
 #endif
 #endif
 
-void set_sys_clock_pll(uint32_t vco_freq, uint post_div1, uint post_div2) {
+void set_sys_clock_pll(uint ref_div, uint32_t vco_freq, uint post_div1, uint post_div2) {
     if (!running_on_fpga()) {
         clock_configure_undivided(clk_sys,
                         CLOCKS_CLK_SYS_CTRL_SRC_VALUE_CLKSRC_CLK_SYS_AUX,
                         CLOCKS_CLK_SYS_CTRL_AUXSRC_VALUE_CLKSRC_PLL_USB,
                         USB_CLK_HZ);
 
-        pll_init(pll_sys, PLL_SYS_REFDIV, vco_freq, post_div1, post_div2);
+        pll_init(pll_sys, ref_div, vco_freq, post_div1, post_div2);
         uint32_t freq = vco_freq / (post_div1 * post_div2);
 
         // Configure clocks
@@ -414,19 +414,22 @@ void set_sys_clock_pll(uint32_t vco_freq, uint post_div1, uint post_div2) {
     }
 }
 
-bool check_sys_clock_hz(uint32_t freq_hz, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
-    uint reference_freq_hz = XOSC_HZ / PLL_SYS_REFDIV;
-    for (uint fbdiv = 320; fbdiv >= 16; fbdiv--) {
-        uint vco_hz = fbdiv * reference_freq_hz;
-        if (vco_hz < PICO_PLL_VCO_MIN_FREQ_HZ || vco_hz > PICO_PLL_VCO_MAX_FREQ_HZ) continue;
-        for (uint postdiv1 = 7; postdiv1 >= 1; postdiv1--) {
-            for (uint postdiv2 = postdiv1; postdiv2 >= 1; postdiv2--) {
-                uint out = vco_hz / (postdiv1 * postdiv2);
-                if (out == freq_hz && !(vco_hz % (postdiv1 * postdiv2))) {
-                    *vco_out = vco_hz;
-                    *postdiv1_out = postdiv1;
-                    *postdiv2_out = postdiv2;
-                    return true;
+bool check_sys_clock_hz(uint32_t freq_hz, uint *refdiv_out, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
+    for (uint refdiv = 63; refdiv >= 1; refdiv--) {
+        uint reference_freq_hz = XOSC_HZ / refdiv;
+        for (uint fbdiv = 320; fbdiv >= 16; fbdiv--) {
+            uint vco_hz = fbdiv * reference_freq_hz;
+            if (vco_hz < PICO_PLL_VCO_MIN_FREQ_HZ || vco_hz > PICO_PLL_VCO_MAX_FREQ_HZ) continue;
+            for (uint postdiv1 = 7; postdiv1 >= 1; postdiv1--) {
+                for (uint postdiv2 = postdiv1; postdiv2 >= 1; postdiv2--) {
+                    uint out = vco_hz / (postdiv1 * postdiv2);
+                    if (out == freq_hz && !(vco_hz % (postdiv1 * postdiv2))) {
+                        *refdiv_out = refdiv;
+                        *vco_out = vco_hz;
+                        *postdiv1_out = postdiv1;
+                        *postdiv2_out = postdiv2;
+                        return true;
+                    }
                 }
             }
         }
@@ -435,19 +438,22 @@ bool check_sys_clock_hz(uint32_t freq_hz, uint *vco_out, uint *postdiv1_out, uin
 }
 
 // Note this impl is kept to preserve previous rounding behavior, vs calling check_sys_clock_hz
-bool check_sys_clock_khz(uint32_t freq_khz, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
-    uint reference_freq_khz = (XOSC_HZ / KHZ) / PLL_SYS_REFDIV;
-    for (uint fbdiv = 320; fbdiv >= 16; fbdiv--) {
-        uint vco_khz = fbdiv * reference_freq_khz;
-        if (vco_khz < PICO_PLL_VCO_MIN_FREQ_HZ / KHZ || vco_khz > PICO_PLL_VCO_MAX_FREQ_HZ / KHZ) continue;
-        for (uint postdiv1 = 7; postdiv1 >= 1; postdiv1--) {
-            for (uint postdiv2 = postdiv1; postdiv2 >= 1; postdiv2--) {
-                uint out = vco_khz / (postdiv1 * postdiv2);
-                if (out == freq_khz && !(vco_khz % (postdiv1 * postdiv2))) {
-                    *vco_out = vco_khz * KHZ;
-                    *postdiv1_out = postdiv1;
-                    *postdiv2_out = postdiv2;
-                    return true;
+bool check_sys_clock_khz(uint32_t freq_khz, uint *refdiv_out, uint *vco_out, uint *postdiv1_out, uint *postdiv2_out) {
+    for (uint refdiv = 63; refdiv >= 1; refdiv--) {
+        uint reference_freq_khz = (XOSC_HZ / KHZ) / refdiv;
+        for (uint fbdiv = 320; fbdiv >= 16; fbdiv--) {
+            uint vco_khz = fbdiv * reference_freq_khz;
+            if (vco_khz < PICO_PLL_VCO_MIN_FREQ_HZ / KHZ || vco_khz > PICO_PLL_VCO_MAX_FREQ_HZ / KHZ) continue;
+            for (uint postdiv1 = 7; postdiv1 >= 1; postdiv1--) {
+                for (uint postdiv2 = postdiv1; postdiv2 >= 1; postdiv2--) {
+                    uint out = vco_khz / (postdiv1 * postdiv2);
+                    if (out == freq_khz && !(vco_khz % (postdiv1 * postdiv2))) {
+                        *refdiv_out = refdiv;
+                        *vco_out = vco_khz * KHZ;
+                        *postdiv1_out = postdiv1;
+                        *postdiv2_out = postdiv2;
+                        return true;
+                    }
                 }
             }
         }

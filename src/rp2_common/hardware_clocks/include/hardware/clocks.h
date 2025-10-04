@@ -470,35 +470,38 @@ void set_sys_clock_48mhz(void);
 /*! \brief Initialise the system clock
  *  \ingroup hardware_clocks
  *
+ * \param ref_div The divider for the reference (XOSC) frequency to be used by the SYS PLL
  * \param vco_freq The voltage controller oscillator frequency to be used by the SYS PLL
  * \param post_div1 The first post divider for the SYS PLL
  * \param post_div2 The second post divider for the SYS PLL.
  *
  * See the PLL documentation in the datasheet for details of driving the PLLs.
  */
-void set_sys_clock_pll(uint32_t vco_freq, uint post_div1, uint post_div2);
+void set_sys_clock_pll(uint ref_div, uint32_t vco_freq, uint post_div1, uint post_div2);
 
 /*! \brief Check if a given system clock frequency is valid/attainable
  *  \ingroup hardware_clocks
  *
  * \param freq_hz Requested frequency
+ * \param refdiv_out On success, the divider for the reference frequency to be used by the SYS PLL
  * \param vco_freq_out On success, the voltage controlled oscillator frequency to be used by the SYS PLL
  * \param post_div1_out On success, The first post divider for the SYS PLL
  * \param post_div2_out On success, The second post divider for the SYS PLL.
  * @return true if the frequency is possible and the output parameters have been written.
  */
-bool check_sys_clock_hz(uint32_t freq_hz, uint *vco_freq_out, uint *post_div1_out, uint *post_div2_out);
+bool check_sys_clock_hz(uint32_t freq_hz, uint *refdiv_out, uint *vco_freq_out, uint *post_div1_out, uint *post_div2_out);
 
 /*! \brief Check if a given system clock frequency is valid/attainable
  *  \ingroup hardware_clocks
  *
  * \param freq_khz Requested frequency
+ * \param refdiv_out On success, the divider for the reference frequency to be used by the SYS PLL
  * \param vco_freq_out On success, the voltage controlled oscillator frequency to be used by the SYS PLL
  * \param post_div1_out On success, The first post divider for the SYS PLL
  * \param post_div2_out On success, The second post divider for the SYS PLL.
  * @return true if the frequency is possible and the output parameters have been written.
  */
-bool check_sys_clock_khz(uint32_t freq_khz, uint *vco_freq_out, uint *post_div1_out, uint *post_div2_out);
+bool check_sys_clock_khz(uint32_t freq_khz, uint *refdiv_out, uint *vco_freq_out, uint *post_div1_out, uint *post_div2_out);
 
 /*! \brief Attempt to set a system clock frequency in hz
  *  \ingroup hardware_clocks
@@ -512,9 +515,9 @@ bool check_sys_clock_khz(uint32_t freq_khz, uint *vco_freq_out, uint *post_div1_
  * \return true if the clock was configured
  */
 static inline bool set_sys_clock_hz(uint32_t freq_hz, bool required) {
-    uint vco, postdiv1, postdiv2;
-    if (check_sys_clock_hz(freq_hz, &vco, &postdiv1, &postdiv2)) {
-        set_sys_clock_pll(vco, postdiv1, postdiv2);
+    uint refdiv, vco, postdiv1, postdiv2;
+    if (check_sys_clock_hz(freq_hz, &refdiv, &vco, &postdiv1, &postdiv2)) {
+        set_sys_clock_pll(refdiv, vco, postdiv1, postdiv2);
         return true;
     } else if (required) {
         panic("System clock of %u Hz cannot be exactly achieved", freq_hz);
@@ -534,9 +537,9 @@ static inline bool set_sys_clock_hz(uint32_t freq_hz, bool required) {
  * \return true if the clock was configured
  */
 static inline bool set_sys_clock_khz(uint32_t freq_khz, bool required) {
-    uint vco, postdiv1, postdiv2;
-    if (check_sys_clock_khz(freq_khz, &vco, &postdiv1, &postdiv2)) {
-        set_sys_clock_pll(vco, postdiv1, postdiv2);
+    uint refdiv, vco, postdiv1, postdiv2;
+    if (check_sys_clock_khz(freq_khz, &refdiv, &vco, &postdiv1, &postdiv2)) {
+        set_sys_clock_pll(refdiv, vco, postdiv1, postdiv2);
         return true;
     } else if (required) {
         panic("System clock of %u kHz cannot be exactly achieved", freq_khz);

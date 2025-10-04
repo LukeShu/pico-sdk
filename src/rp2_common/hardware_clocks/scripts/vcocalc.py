@@ -72,14 +72,9 @@ f"""target_compile_definitions({args.cmake_executable_name} PRIVATE
 		print("FBDIV:     {} (VCO = {} MHz)".format(best_fbdiv, args.input / best_refdiv * best_fbdiv))
 		print("PD1:       {}".format(best_pd1))
 		print("PD2:       {}".format(best_pd2))
-		if best_refdiv != 1:
-			print(
-				"\nThis requires a non-default REFDIV value.\n"
-				"Add the following to your CMakeLists.txt to apply the REFDIV:\n"
-			)
-		elif args.cmake or args.cmake_only:
+		if args.cmake or args.cmake_only:
 			print("")
-	if args.cmake or args.cmake_only or best_refdiv != 1:
+	if args.cmake or args.cmake_only:
 		print(cmake_output)
 else:
 	sys.exit("No solution found")
