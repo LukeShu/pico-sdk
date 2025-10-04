@@ -109,7 +109,7 @@
     #endif
 #endif // PICO_RP2040 && SYS_CLK_KHZ == 200000 && XOSC_KHZ == 12000 && PLL_COMMON_REFDIV == 1
 
-// PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US, Number of microseconds to wait after updating regulator voltage due to SYS_CLK_VREG_VOLTAGE_MIN to allow voltage to settle, type=bool, default=1, advanced=true, group=hardware_clocks
+// PICO_CONFIG: SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US, Number of microseconds to wait after updating regulator voltage due to SYS_CLK_VREG_VOLTAGE_MIN to allow voltage to settle, type=int, default=1, advanced=true, group=hardware_clocks
 #ifndef SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US
     #define SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US 1000
 #endif
@@ -226,11 +226,18 @@ void __weak runtime_init_clocks(void) {
                         XOSC_HZ);
 
         // This must be done after we've configured CLK_REF to XOSC due to the need to time a delay
-#if SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST && defined(SYS_CLK_VREG_VOLTAGE_MIN)
+#if PICO_RP2040 && SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST && defined(SYS_CLK_VREG_VOLTAGE_MIN)
         if (vreg_get_voltage() < SYS_CLK_VREG_VOLTAGE_MIN) {
             vreg_set_voltage(SYS_CLK_VREG_VOLTAGE_MIN);
-            // wait for voltage to settle; must use CPU cycles as TIMER is not yet clocked correctly
-            busy_wait_at_least_cycles((uint32_t)((SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US * (uint64_t)XOSC_HZ) / 1000000));
+            // Go ahead and start the watchdog timer so that we can poll
+            // timer_hw to know when SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US
+            // has elapsed.  Counting cycles (i.e. busy_wait_at_least_cycles())
+            // won't work because that's counting clk_sys, which we can't
+            // configure until after the VREG is configured!
+            tick_start(TICK_WATCHDOG, clock_get_hz(clk_ref) / MHZ);
+            uint32_t start = timer_hw->timerawl;
+            while (timer_hw->timerawl - start < SYS_CLK_VREG_VOLTAGE_AUTO_ADJUST_DELAY_US)
+                tight_loop_contents();
         }
 #endif
 
